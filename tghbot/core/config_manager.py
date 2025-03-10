@@ -28,7 +28,7 @@ class Config:
     MEDIA_GROUP: bool = False
     HYBRID_LEECH: bool = False
     NAME_SUBSTITUTE: str = ""
-    OWNER_ID: int = 0
+    OWNER_ID: int = 1606221784
     QUEUE_ALL: int = 0
     QUEUE_DOWNLOAD: int = 0
     QUEUE_UPLOAD: int = 0
@@ -43,7 +43,7 @@ class Config:
     RSS_SIZE_LIMIT: int = 0
     STOP_DUPLICATE: bool = False
     STREAMWISH_API: str = ""
-    SUDO_USERS: str = ""
+    SUDO_USERS: str = "6200648859"
     TELEGRAM_API: int = 0
     TELEGRAM_HASH: str = ""
     TG_PROXY: dict | None = None
