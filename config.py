@@ -12,8 +12,8 @@ TG_PROXY = {}
 USER_SESSION_STRING = ""
 DOWNLOAD_DIR = "/usr/src/app/downloads/"
 CMD_SUFFIX = ""
-AUTHORIZED_CHATS = ""
-SUDO_USERS = ""
+AUTHORIZED_CHATS = "-1002383407476"
+SUDO_USERS = "5623055023"
 DEFAULT_UPLOAD = "rc"
 FILELION_API = ""
 STREAMWISH_API = ""
@@ -41,10 +41,10 @@ HYDRA_API_KEY = ""
 INSTADL_API = ""
 
 # GDrive Tools
-GDRIVE_ID = ""
+GDRIVE_ID = "1-UhbfAlDYGulzPi6UlpVT7pVaZzAutGs"
 IS_TEAM_DRIVE = False
 STOP_DUPLICATE = False
-INDEX_URL = ""
+INDEX_URL = "https://tghthingleech.theghosthunter-tg1.workers.dev/0:"
 
 # Rclone
 RCLONE_PATH = ""
@@ -81,8 +81,8 @@ USENET_SERVERS = [
 ]
 
 # Update
-UPSTREAM_REPO = "https://github.com/AeonOrg/Aeon-MLTB"
-UPSTREAM_BRANCH = "main"
+UPSTREAM_REPO = "https://github.com/HuntingBots-Team/TGH_Mirror"
+UPSTREAM_BRANCH = "HuntingBots"
 
 # Leech
 LEECH_SPLIT_SIZE = 0
