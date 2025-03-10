@@ -33,3 +33,8 @@ uvicorn
 uvloop
 xattr
 yt-dlp[default,curl-cffi]
+
+
+# etra requirement 
+
+pymongo
