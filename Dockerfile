@@ -8,4 +8,4 @@ COPY requirements.txt .
 RUN uv pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-CMD ["bash", "update.py"]
+CMD ["bash", "start.sh"]
