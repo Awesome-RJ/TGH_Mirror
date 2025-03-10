@@ -1,4 +1,4 @@
-FROM huntingbots1/tgh-mirror:latest
+FROM 5hojib/aeon:latest
 
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
