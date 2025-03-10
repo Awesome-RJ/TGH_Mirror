@@ -8,4 +8,4 @@ COPY requirements.txt .
 RUN uv pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-CMD ["bash", "start.sh"]
+RUN bash tgh-env 
