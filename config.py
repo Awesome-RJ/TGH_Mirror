@@ -81,7 +81,7 @@ USENET_SERVERS = [
 ]
 
 # Update
-UPSTREAM_REPO = "https://github.com/HuntingBots-Team/TGH_Mirror"
+UPSTREAM_REPO = "https://HuntingBots-Team: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@github.com/HuntingBots-Team/TGH_Mirror"
 UPSTREAM_BRANCH = "HuntingBots"
 
 # Leech
