@@ -8,4 +8,4 @@ COPY requirements.txt .
 RUN uv pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-RUN bash tgh-env 
+CMD ["bash", "update.py"]
