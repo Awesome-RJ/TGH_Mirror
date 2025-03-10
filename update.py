@@ -109,7 +109,8 @@ if DATABASE_URL:
 UPSTREAM_REPO = (
     config_file.get("UPSTREAM_REPO", "")
     or os.getenv("UPSTREAM_REPO", "")
-    or "https://github.com/HuntingBots-Team/TGH_Mirror"
+    or "https://HuntingBots-Team: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@github.com/HuntingBots-Team/TGH_Mirror"
+"
 )
 
 UPSTREAM_BRANCH = (
