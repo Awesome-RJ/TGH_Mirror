@@ -25,6 +25,7 @@ psutil
 pyshorteners
 python-magic
 pytz
+pymongo
 requests
 speedtest-cli
 telegraph
