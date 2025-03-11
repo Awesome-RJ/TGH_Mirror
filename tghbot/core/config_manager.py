@@ -28,7 +28,7 @@ class Config:
     MEDIA_GROUP: bool = False
     HYBRID_LEECH: bool = False
     NAME_SUBSTITUTE: str = ""
-    OWNER_ID: str = ""
+    OWNER_ID: int = 0
     QUEUE_ALL: int = 0
     QUEUE_DOWNLOAD: int = 0
     QUEUE_UPLOAD: int = 0
@@ -44,7 +44,7 @@ class Config:
     STOP_DUPLICATE: bool = False
     STREAMWISH_API: str = ""
     SUDO_USERS: str = ""
-    TELEGRAM_API: str = ""
+    TELEGRAM_API: int = 0
     TELEGRAM_HASH: str = ""
     TG_PROXY: dict | None = None
     THUMBNAIL_LAYOUT: str = ""
