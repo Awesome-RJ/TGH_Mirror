@@ -106,11 +106,11 @@ if DATABASE_URL:
     except Exception as e:
         log_error(f"Database ERROR: {e}")
 
-UPSTREAM_REPO = environ.get("UPSTREAM_REPO", "")
+UPSTREAM_REPO = config_file.get("UPSTREAM_REPO", "")
 if len(UPSTREAM_REPO) == 0:
     UPSTREAM_REPO = None
 
-UPSTREAM_BRANCH = environ.get("UPSTREAM_BRANCH", "")
+UPSTREAM_BRANCH = config_file.get("UPSTREAM_BRANCH", "")
 if len(UPSTREAM_BRANCH) == 0:
     UPSTREAM_BRANCH = "HuntingBots"
 
