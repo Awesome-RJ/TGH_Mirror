@@ -103,16 +103,16 @@ if DATABASE_URL is not None:
         environ["UPGRADE_PACKAGES"] = config_dict.get("UPDATE_PACKAGES", "False")
     conn.close()
 
-UPGRADE_PACKAGES = environ.get("UPGRADE_PACKAGES", "False")
+UPGRADE_PACKAGES = config_file.get("UPGRADE_PACKAGES", "False")
 if UPGRADE_PACKAGES.lower() == "true":
     packages = [dist.project_name for dist in working_set]
     scall("uv pip install --system " + " ".join(packages), shell=True)
 
-UPSTREAM_REPO = environ.get("UPSTREAM_REPO", "")
+UPSTREAM_REPO = config_file.get("UPSTREAM_REPO", "")
 if len(UPSTREAM_REPO) == 0:
     UPSTREAM_REPO = None
 
-UPSTREAM_BRANCH = environ.get("UPSTREAM_BRANCH", "")
+UPSTREAM_BRANCH = config_file.get("UPSTREAM_BRANCH", "")
 if len(UPSTREAM_BRANCH) == 0:
     UPSTREAM_BRANCH = "HuntingBots"
 
