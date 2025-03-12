@@ -5,74 +5,65 @@ from typing import Any, ClassVar
 
 
 class Config:
-    AS_DOCUMENT: bool = False
-    AUTHORIZED_CHATS: str = ""
-    BASE_URL: str = ""
-    BASE_URL_PORT: int = 80
-    BOT_TOKEN: str = ""
-    CMD_SUFFIX: str = ""
-    DATABASE_URL: str = ""
-    DEFAULT_UPLOAD: str = "rc"
-    EXCLUDED_EXTENSIONS: str = ""
-    FFMPEG_CMDS: ClassVar[dict[str, list[str]]] = {}
-    FILELION_API: str = ""
-    GDRIVE_ID: str = ""
-    INCOMPLETE_TASK_NOTIFIER: bool = False
-    INDEX_URL: str = ""
-    JD_EMAIL: str = ""
-    JD_PASS: str = ""
-    IS_TEAM_DRIVE: bool = False
-    LEECH_DUMP_CHAT: str = ""
-    LEECH_FILENAME_PREFIX: str = ""
-    LEECH_SPLIT_SIZE: int = 2097152000
-    MEDIA_GROUP: bool = False
-    HYBRID_LEECH: bool = False
-    NAME_SUBSTITUTE: str = ""
-    OWNER_ID: int = 0
-    QUEUE_ALL: int = 0
-    QUEUE_DOWNLOAD: int = 0
-    QUEUE_UPLOAD: int = 0
-    RCLONE_FLAGS: str = ""
-    RCLONE_PATH: str = ""
-    RCLONE_SERVE_URL: str = ""
-    RCLONE_SERVE_USER: str = ""
-    RCLONE_SERVE_PASS: str = ""
-    RCLONE_SERVE_PORT: int = 8080
-    RSS_CHAT: str = ""
-    RSS_DELAY: int = 600
-    RSS_SIZE_LIMIT: int = 0
-    STOP_DUPLICATE: bool = False
-    STREAMWISH_API: str = ""
-    SUDO_USERS: str = ""
-    TELEGRAM_API: int = 0
-    TELEGRAM_HASH: str = ""
-    TG_PROXY: dict | None = None
-    THUMBNAIL_LAYOUT: str = ""
-    TORRENT_TIMEOUT: int = 0
-    UPLOAD_PATHS: dict = {}
-    UPSTREAM_REPO: str = ""
-    USENET_SERVERS: list = []
-    UPSTREAM_BRANCH: str = "main"
-    USER_SESSION_STRING: str = ""
-    USER_TRANSMISSION: bool = False
-    USE_SERVICE_ACCOUNTS: bool = False
-    WEB_PINCODE: bool = False
-    YT_DLP_OPTIONS: dict = {}
-
-    # INKYPINKY
-    METADATA_KEY: str = ""
-    WATERMARK_KEY: str = ""
-    SET_COMMANDS: bool = True
-    TOKEN_TIMEOUT: int = 0
-    PAID_CHANNEL_ID: int = 0
-    PAID_CHANNEL_LINK: str = ""
-    DELETE_LINKS: bool = False
-    FSUB_IDS: str = ""
-    LOG_CHAT_ID: int = 0
-    LEECH_FILENAME_CAPTION: str = ""
-    HYDRA_IP: str = ""
-    HYDRA_API_KEY: str = ""
-    INSTADL_API: str = ""
+    AS_DOCUMENT = False
+    AUTHORIZED_CHATS = ""
+    BASE_URL = ""
+    BASE_URL_PORT = 80
+    BOT_TOKEN = ""
+    CMD_SUFFIX = ""
+    DATABASE_URL = ""
+    DEFAULT_UPLOAD = "rc"
+    EQUAL_SPLITS = False
+    EXCLUDED_EXTENSIONS = ""
+    FFMPEG_CMDS = {}
+    FILELION_API = ""
+    GDRIVE_ID = ""
+    INCOMPLETE_TASK_NOTIFIER = False
+    INDEX_URL = ""
+    IS_TEAM_DRIVE = False
+    JD_EMAIL = ""
+    JD_PASS = ""
+    LEECH_DUMP_CHAT = ""
+    LEECH_FILENAME_PREFIX = ""
+    LEECH_SPLIT_SIZE = 2097152000
+    MEDIA_GROUP = False
+    HYBRID_LEECH = False
+    NAME_SUBSTITUTE = ""
+    OWNER_ID = 
+    QUEUE_ALL = 0
+    QUEUE_DOWNLOAD = 0
+    QUEUE_UPLOAD = 0
+    RCLONE_FLAGS = ""
+    RCLONE_PATH = ""
+    RCLONE_SERVE_URL = ""
+    RCLONE_SERVE_USER = ""
+    RCLONE_SERVE_PASS = ""
+    RCLONE_SERVE_PORT = 8080
+    RSS_CHAT = ""
+    RSS_DELAY = 600
+    RSS_SIZE_LIMIT = 0
+    SEARCH_API_LINK = ""
+    SEARCH_LIMIT = 0
+    SEARCH_PLUGINS = []
+    STATUS_LIMIT = 4
+    STATUS_UPDATE_INTERVAL = 15
+    STOP_DUPLICATE = False
+    STREAMWISH_API = ""
+    SUDO_USERS = ""
+    TELEGRAM_API = 
+    TELEGRAM_HASH = ""
+    TG_PROXY = None
+    THUMBNAIL_LAYOUT = ""
+    TORRENT_TIMEOUT = 0
+    UPLOAD_PATHS = {}
+    UPSTREAM_REPO = ""
+    UPSTREAM_BRANCH = "master"
+    USENET_SERVERS = []
+    USER_SESSION_STRING = ""
+    USER_TRANSMISSION = False
+    USE_SERVICE_ACCOUNTS = False
+    WEB_PINCODE = False
+    YT_DLP_OPTIONS = {}
 
     @classmethod
     def get(cls, key):
@@ -89,43 +80,43 @@ class Config:
     def get_all(cls):
         return {
             key: getattr(cls, key)
-            for key in sorted(cls.__dict__)
+            for key in cls.__dict__.keys()
             if not key.startswith("__") and not callable(getattr(cls, key))
         }
 
     @classmethod
     def load(cls):
-        try:
-            settings = import_module("config")
-        except ModuleNotFoundError:
-            return
-        else:
-            for attr in dir(settings):
-                if hasattr(cls, attr):
-                    value = getattr(settings, attr)
-                    if not value:
-                        continue
-                    if isinstance(value, str):
-                        value = value.strip()
-                    if attr == "DEFAULT_UPLOAD" and value != "gd":
-                        value = "rc"
-                    elif (
-                        attr
-                        in [
-                            "BASE_URL",
-                            "RCLONE_SERVE_URL",
-                            "INDEX_URL",
-                        ]
-                        and value
-                    ):
+        settings = import_module("config")
+        for attr in dir(settings):
+            if hasattr(cls, attr):
+                value = getattr(settings, attr)
+                if not value:
+                    continue
+                if isinstance(value, str):
+                    value = value.strip()
+                if attr == "DEFAULT_UPLOAD" and value != "gd":
+                    value = "rc"
+                elif attr in [
+                    "BASE_URL",
+                    "RCLONE_SERVE_URL",
+                    "INDEX_URL",
+                    "SEARCH_API_LINK",
+                ]:
+                    if value:
                         value = value.strip("/")
-                    elif attr == "USENET_SERVERS":
-                        try:
-                            if not value[0].get("host"):
-                                continue
-                        except Exception:
+                elif attr == "USENET_SERVERS":
+                    try:
+                        if not value[0].get("host"):
                             continue
-                    setattr(cls, attr, value)
+                    except:
+                        continue
+                setattr(cls, attr, value)
+        for key in ["BOT_TOKEN", "OWNER_ID", "TELEGRAM_API", "TELEGRAM_HASH"]:
+            value = getattr(cls, key)
+            if isinstance(value, str):
+                value = value.strip()
+            if not value:
+                raise ValueError(f"{key} variable is missing!")
 
     @classmethod
     def load_dict(cls, config_dict):
@@ -133,64 +124,24 @@ class Config:
             if hasattr(cls, key):
                 if key == "DEFAULT_UPLOAD" and value != "gd":
                     value = "rc"
-                elif (
-                    key
-                    in [
-                        "BASE_URL",
-                        "RCLONE_SERVE_URL",
-                        "INDEX_URL",
-                    ]
-                    and value
-                ):
-                    value = value.strip("/")
+                elif key in [
+                    "BASE_URL",
+                    "RCLONE_SERVE_URL",
+                    "INDEX_URL",
+                    "SEARCH_API_LINK",
+                ]:
+                    if value:
+                        value = value.strip("/")
                 elif key == "USENET_SERVERS":
                     try:
                         if not value[0].get("host"):
                             value = []
-                    except Exception:
+                    except:
                         value = []
                 setattr(cls, key, value)
-
-
-class SystemEnv:
-    @classmethod
-    def load(cls):
-        config_vars = Config.get_all()
-        for key in config_vars:
-            env_value = os.getenv(key)
-            if env_value is not None:
-                converted_value = cls._convert_type(key, env_value)
-                Config.set(key, converted_value)
-
-    @classmethod
-    def _convert_type(cls, key: str, value: str) -> Any:
-        original_value = getattr(Config, key, None)
-
-        if original_value is None:
-            return value
-
-        if isinstance(original_value, bool):
-            return value.lower() in ("true", "1", "yes")
-
-        if isinstance(original_value, int):
-            try:
-                return int(value)
-            except ValueError:
-                return original_value
-
-        if isinstance(original_value, float):
-            try:
-                return float(value)
-            except ValueError:
-                return original_value
-
-        if isinstance(original_value, list):
-            return value.split(",")
-
-        if isinstance(original_value, dict):
-            try:
-                return ast.literal_eval(value)
-            except (SyntaxError, ValueError):
-                return original_value
-
-        return value
+        for key in ["BOT_TOKEN", "OWNER_ID", "TELEGRAM_API", "TELEGRAM_HASH"]:
+            value = getattr(cls, key)
+            if isinstance(value, str):
+                value = value.strip()
+            if not value:
+                raise ValueError(f"{key} variable is missing!")
