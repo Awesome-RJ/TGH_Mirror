@@ -50,7 +50,7 @@ class Config:
     STOP_DUPLICATE = False
     STREAMWISH_API = ""
     SUDO_USERS = ""
-    TELEGRAM_API = 
+    TELEGRAM_API = 3975570
     TELEGRAM_HASH = ""
     TG_PROXY = None
     THUMBNAIL_LAYOUT = ""
