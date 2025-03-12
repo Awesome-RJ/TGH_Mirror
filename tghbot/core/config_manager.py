@@ -1,4 +1,7 @@
+import ast
+import os
 from importlib import import_module
+from typing import Any, ClassVar
 
 
 class Config:
@@ -62,6 +65,21 @@ class Config:
     WEB_PINCODE = False
     YT_DLP_OPTIONS = {}
 
+    # INKYPINKY
+    METADATA_KEY: str = ""
+    WATERMARK_KEY: str = ""
+    SET_COMMANDS: bool = True
+    TOKEN_TIMEOUT: int = 0
+    PAID_CHANNEL_ID: int = 0
+    PAID_CHANNEL_LINK: str = ""
+    DELETE_LINKS: bool = False
+    FSUB_IDS: str = ""
+    LOG_CHAT_ID: int = 0
+    LEECH_FILENAME_CAPTION: str = ""
+    HYDRA_IP: str = ""
+    HYDRA_API_KEY: str = ""
+    INSTADL_API: str = ""
+
     @classmethod
     def get(cls, key):
         return getattr(cls, key) if hasattr(cls, key) else None
@@ -77,43 +95,43 @@ class Config:
     def get_all(cls):
         return {
             key: getattr(cls, key)
-            for key in cls.__dict__
+            for key in sorted(cls.__dict__)
             if not key.startswith("__") and not callable(getattr(cls, key))
         }
 
     @classmethod
     def load(cls):
-        settings = import_module("config")
-        for attr in dir(settings):
-            if hasattr(cls, attr):
-                value = getattr(settings, attr)
-                if not value:
-                    continue
-                if isinstance(value, str):
-                    value = value.strip()
-                if attr == "DEFAULT_UPLOAD" and value != "gd":
-                    value = "rc"
-                elif attr in [
-                    "BASE_URL",
-                    "RCLONE_SERVE_URL",
-                    "INDEX_URL",
-                    "SEARCH_API_LINK",
-                ]:
-                    if value:
-                        value = value.strip("/")
-                elif attr == "USENET_SERVERS":
-                    try:
-                        if not value[0].get("host"):
-                            continue
-                    except:
+        try:
+            settings = import_module("config")
+        except ModuleNotFoundError:
+            return
+        else:
+            for attr in dir(settings):
+                if hasattr(cls, attr):
+                    value = getattr(settings, attr)
+                    if not value:
                         continue
-                setattr(cls, attr, value)
-        for key in ["BOT_TOKEN", "OWNER_ID", "TELEGRAM_API", "TELEGRAM_HASH"]:
-            value = getattr(cls, key)
-            if isinstance(value, str):
-                value = value.strip()
-            if not value:
-                raise ValueError(f"{key} variable is missing!")
+                    if isinstance(value, str):
+                        value = value.strip()
+                    if attr == "DEFAULT_UPLOAD" and value != "gd":
+                        value = "rc"
+                    elif (
+                        attr
+                        in [
+                            "BASE_URL",
+                            "RCLONE_SERVE_URL",
+                            "INDEX_URL",
+                        ]
+                        and value
+                    ):
+                        value = value.strip("/")
+                    elif attr == "USENET_SERVERS":
+                        try:
+                            if not value[0].get("host"):
+                                continue
+                        except Exception:
+                            continue
+                    setattr(cls, attr, value)
 
     @classmethod
     def load_dict(cls, config_dict):
@@ -121,24 +139,64 @@ class Config:
             if hasattr(cls, key):
                 if key == "DEFAULT_UPLOAD" and value != "gd":
                     value = "rc"
-                elif key in [
-                    "BASE_URL",
-                    "RCLONE_SERVE_URL",
-                    "INDEX_URL",
-                    "SEARCH_API_LINK",
-                ]:
-                    if value:
-                        value = value.strip("/")
+                elif (
+                    key
+                    in [
+                        "BASE_URL",
+                        "RCLONE_SERVE_URL",
+                        "INDEX_URL",
+                    ]
+                    and value
+                ):
+                    value = value.strip("/")
                 elif key == "USENET_SERVERS":
                     try:
                         if not value[0].get("host"):
                             value = []
-                    except:
+                    except Exception:
                         value = []
                 setattr(cls, key, value)
-        for key in ["BOT_TOKEN", "OWNER_ID", "TELEGRAM_API", "TELEGRAM_HASH"]:
-            value = getattr(cls, key)
-            if isinstance(value, str):
-                value = value.strip()
-            if not value:
-                raise ValueError(f"{key} variable is missing!")
+
+
+class SystemEnv:
+    @classmethod
+    def load(cls):
+        config_vars = Config.get_all()
+        for key in config_vars:
+            env_value = os.getenv(key)
+            if env_value is not None:
+                converted_value = cls._convert_type(key, env_value)
+                Config.set(key, converted_value)
+
+    @classmethod
+    def _convert_type(cls, key: str, value: str) -> Any:
+        original_value = getattr(Config, key, None)
+
+        if original_value is None:
+            return value
+
+        if isinstance(original_value, bool):
+            return value.lower() in ("true", "1", "yes")
+
+        if isinstance(original_value, int):
+            try:
+                return int(value)
+            except ValueError:
+                return original_value
+
+        if isinstance(original_value, float):
+            try:
+                return float(value)
+            except ValueError:
+                return original_value
+
+        if isinstance(original_value, list):
+            return value.split(",")
+
+        if isinstance(original_value, dict):
+            try:
+                return ast.literal_eval(value)
+            except (SyntaxError, ValueError):
+                return original_value
+
+        return value
