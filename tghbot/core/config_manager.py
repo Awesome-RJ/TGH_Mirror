@@ -29,7 +29,7 @@ class Config:
     MEDIA_GROUP = False
     HYBRID_LEECH = False
     NAME_SUBSTITUTE = ""
-    OWNER_ID = 
+    OWNER_ID = 1606221784
     QUEUE_ALL = 0
     QUEUE_DOWNLOAD = 0
     QUEUE_UPLOAD = 0
@@ -57,7 +57,7 @@ class Config:
     TORRENT_TIMEOUT = 0
     UPLOAD_PATHS = {}
     UPSTREAM_REPO = ""
-    UPSTREAM_BRANCH = "master"
+    UPSTREAM_BRANCH = "HuntingBots"
     USENET_SERVERS = []
     USER_SESSION_STRING = ""
     USER_TRANSMISSION = False
