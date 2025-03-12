@@ -234,9 +234,14 @@ async def update_variables():
                 auth_chats[chat_id] = []
 
     if Config.SUDO_USERS:
-        aid = Config.SUDO_USERS.split()
-        for id_ in aid:
-            sudo_users.append(int(id_.strip()))
+        if isinstance(Config.SUDO_USERS, str):
+            aid = Config.SUDO_USERS.split()
+            for id_ in aid:
+                sudo_users.append(int(id_.strip()))
+        else:
+            # Handle case where SUDO_USERS is already a tuple/list
+            for id_ in Config.SUDO_USERS:
+                sudo_users.append(int(id_))
 
     if Config.EXCLUDED_EXTENSIONS:
         fx = Config.EXCLUDED_EXTENSIONS.split()
