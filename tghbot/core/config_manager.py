@@ -29,7 +29,7 @@ class Config:
     MEDIA_GROUP = False
     HYBRID_LEECH = False
     NAME_SUBSTITUTE = ""
-    OWNER_ID = 1606221784
+    OWNER_ID = 6200648859
     QUEUE_ALL = 0
     QUEUE_DOWNLOAD = 0
     QUEUE_UPLOAD = 0
