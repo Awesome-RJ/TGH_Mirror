@@ -25,7 +25,9 @@ async def restart_bot(_, message):
     buttons.data_button("Yes!", "botrestart confirm")
     buttons.data_button("Cancel", "botrestart cancel")
     button = buttons.build_menu(2)
-    await send_message(message, "Are you sure you want to restart the bot ?!", button)
+    await send_message(
+        message, "Are you sure you want to restart the bot ?!", button
+    )
 
 
 @new_task
@@ -35,7 +37,9 @@ async def restart_sessions(_, message):
     buttons.data_button("Cancel", "sessionrestart cancel")
     button = buttons.build_menu(2)
     await send_message(
-        message, "Are you sure you want to restart the session(s) ?!", button
+        message,
+        "Are you sure you want to restart the session(s) ?!",
+        button,
     )
 
 
@@ -70,7 +74,9 @@ async def restart_notification():
     if Config.INCOMPLETE_TASK_NOTIFIER and Config.DATABASE_URL:
         if notifier_dict := await database.get_incomplete_tasks():
             for cid, data in notifier_dict.items():
-                msg = "Restarted Successfully!" if cid == chat_id else "Bot Restarted!"
+                msg = (
+                    "Restarted Successfully!" if cid == chat_id else "Bot Restarted!"
+                )
                 for tag, links in data.items():
                     msg += f"\n\n{tag}: "
                     for index, link in enumerate(links, start=1):
@@ -82,12 +88,12 @@ async def restart_notification():
                     await send_incomplete_task_message(cid, msg_id, msg)
 
     if await aiopath.isfile(".restartmsg"):
-        try:
+        with contextlib.suppress(Exception):
             await TgClient.bot.edit_message_text(
-                chat_id=chat_id, message_id=msg_id, text="Restarted Successfully!"
+                chat_id=chat_id,
+                message_id=msg_id,
+                text="Restarted Successfully!",
             )
-        except:
-            pass
         await remove(".restartmsg")
 
 
