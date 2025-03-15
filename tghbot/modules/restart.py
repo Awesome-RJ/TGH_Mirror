@@ -21,27 +21,57 @@ from tghbot.helper.telegram_helper.message_utils import delete_message, send_mes
 
 @new_task
 async def restart_bot(_, message):
-    buttons = button_build.ButtonMaker()
-    buttons.data_button("Yes!", "botrestart confirm")
-    buttons.data_button("Cancel", "botrestart cancel")
-    button = buttons.build_menu(2)
-    await send_message(
+async def restart(_, message):
+    intervals["stopAll"] = True
+    restart_message = await send_message(
         message,
-        "Are you sure you want to restart the bot ?!",
-        button,
+        "Restarting..."
     )
-
-
-@new_task
-async def restart_sessions(_, message):
-    buttons = button_build.ButtonMaker()
-    buttons.data_button("Yes!", "sessionrestart confirm")
-    buttons.data_button("Cancel", "sessionrestart cancel")
-    button = buttons.build_menu(2)
-    await send_message(
-        message,
-        "Are you sure you want to restart the session(s) ?!",
-        button,
+    if scheduler.running:
+        scheduler.shutdown(wait=False)
+    if qb := intervals["qb"]:
+        qb.cancel()
+    if jd := intervals["jd"]:
+        jd.cancel()
+    if nzb := intervals["nzb"]:
+        nzb.cancel()
+    if st := intervals["status"]:
+        for intvl in list(st.values()):
+            intvl.cancel()
+    await sync_to_async(clean_all)
+    if sabnzbd_client.LOGGED_IN:
+        await gather(
+            sabnzbd_client.pause_all(),
+            sabnzbd_client.purge_all(True),
+            sabnzbd_client.delete_history(
+                "all",
+                delete_files=True
+            ),
+        )
+    proc1 = await create_subprocess_exec(
+        "pkill",
+        "-9",
+        "-f",
+        "gunicorn|aria2c|qbittorrent-nox|ffmpeg|rclone|java|sabnzbdplus"
+    )
+    proc2 = await create_subprocess_exec(
+        "python3",
+        "update.py"
+    )
+    await gather(
+        proc1.wait(),
+        proc2.wait()
+    )
+    async with aiopen(
+        ".restartmsg",
+        "w"
+    ) as f:
+        await f.write(f"{restart_message.chat.id}\n{restart_message.id}\n") # type: ignore
+    osexecl(
+        executable,
+        executable,
+        "-m",
+        "bot"
     )
 
 
