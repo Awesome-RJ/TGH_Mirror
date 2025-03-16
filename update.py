@@ -118,7 +118,11 @@ UPSTREAM_BRANCH = (
     or "HuntingBots"
 )
 
-if UPSTREAM_REPO:
+# Check if git reset is disabled (useful for Docker environments)
+GIT_RESET_ENABLED = os.getenv("ENABLE_GIT_RESET", "true").lower() != "false"
+
+if UPSTREAM_REPO and GIT_RESET_ENABLED:
+    log_info("Git reset is enabled, updating from upstream repository")
     if path.exists(".git"):
         srun(["rm", "-rf", ".git"], check=False)
 
@@ -143,3 +147,7 @@ if UPSTREAM_REPO:
         log_error(
             "Something went wrong while updating, check UPSTREAM_REPO if valid or not!",
         )
+elif not GIT_RESET_ENABLED:
+    log_info("Git reset is disabled. Skipping repository update.")
+elif not UPSTREAM_REPO:
+    log_info("No upstream repository configured. Skipping update.")
