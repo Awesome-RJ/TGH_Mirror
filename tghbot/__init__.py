@@ -18,6 +18,7 @@ from logging import (
     basicConfig,
     getLogger,
 )
+from os import cpu_count
 from time import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -25,8 +26,6 @@ from pytz import timezone
 from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
-from time import time
-from os import cpu_count
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
