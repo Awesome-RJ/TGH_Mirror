@@ -115,7 +115,7 @@ UPSTREAM_REPO = (
 UPSTREAM_BRANCH = (
     config_file.get("UPSTREAM_BRANCH", "")
     or os.getenv("UPSTREAM_BRANCH", "")
-    or "main"
+    or "HuntingBots"
 )
 
 if UPSTREAM_REPO:
@@ -125,8 +125,8 @@ if UPSTREAM_REPO:
     update = srun(
         [
             f"git init -q \
-                     && git config --global user.email e.anastayyar@gmail.com \
-                     && git config --global user.name mltb \
+                     && git config --global user.email huntingbots.tg@gmail.com \
+                     && git config --global user.name HuntingBots \
                      && git add . \
                      && git commit -sm update -q \
                      && git remote add origin {UPSTREAM_REPO} \
