@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM huntingbots1/tgh-mirror:latest
 
 WORKDIR /usr/src/app
 ENV DEBIAN_FRONTEND=noninteractive
