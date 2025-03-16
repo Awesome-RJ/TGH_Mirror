@@ -118,19 +118,15 @@ UPSTREAM_BRANCH = (
     or "HuntingBots"
 )
 
-# Check if git reset is disabled (useful for Docker environments)
-GIT_RESET_ENABLED = os.getenv("ENABLE_GIT_RESET", "true").lower() != "false"
-
-if UPSTREAM_REPO and GIT_RESET_ENABLED:
-    log_info("Git reset is enabled, updating from upstream repository")
+if UPSTREAM_REPO:
     if path.exists(".git"):
         srun(["rm", "-rf", ".git"], check=False)
 
     update = srun(
         [
             f"git init -q \
-                     && git config --global user.email e.anastayyar@gmail.com \
-                     && git config --global user.name mltb \
+                     && git config --global user.email huntingbots.tg@gmail.com \
+                     && git config --global user.name HuntingBots \
                      && git add . \
                      && git commit -sm update -q \
                      && git remote add origin {UPSTREAM_REPO} \
@@ -146,8 +142,4 @@ if UPSTREAM_REPO and GIT_RESET_ENABLED:
     else:
         log_error(
             "Something went wrong while updating, check UPSTREAM_REPO if valid or not!",
-        )
-elif not GIT_RESET_ENABLED:
-    log_info("Git reset is disabled. Skipping repository update.")
-elif not UPSTREAM_REPO:
-    log_info("No upstream repository configured. Skipping update.")
+            )
