@@ -88,7 +88,7 @@ RUN chmod -R 777 /usr/src/app
 RUN chmod 777 downloads
 
 # Run Aeon script for additional dependencies
-RUN bash Aeon
+RUN bash tgh-env
 
 # Create symlinks for binaries
 RUN ln -sf /usr/local/bin/xnox /usr/bin/xnox \
