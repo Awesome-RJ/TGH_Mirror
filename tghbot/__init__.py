@@ -115,24 +115,34 @@ sabnzbd_client = SabnzbdClient(
     api_key="mltb",
     port="8070",
 )
-subprocess.run(["xnox", "-d", f"--profile={os.getcwd()}"], check=False)
-subprocess.run(
-    [
-        "xnzb",
-        "-f",
-        "sabnzbd/SABnzbd.ini",
-        "-s",
-        ":::8070",
-        "-b",
-        "0",
-        "-d",
-        "-c",
-        "-l",
-        "0",
-        "--console",
-    ],
-    check=False,
-)
+# Check if xnox exists before trying to run it
+ if shutil.which("xnox"):
+     subprocess.run(["xnox", "-d", f"--profile={os.getcwd()}"], check=False)
+ else:
+     LOGGER.warning("xnox binary not found, skipping qBittorrent daemon startup")
+ 
+ # Check if xnzb exists before trying to run it
+ if shutil.which("xnzb"):
+     subprocess.run(
+         [
+             "xnzb",
+             "-f",
+             "sabnzbd/SABnzbd.ini",
+             "-s",
+             ":::8070",
+             "-b",
+             "0",
+             "-d",
+             "-c",
+             "-l",
+             "0",
+             "--console",
+         ],
+         check=False,
+     )
+ else:
+     LOGGER.warning("xnzb binary not found, skipping SABnzbd daemon startup")
 
 
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
+0
