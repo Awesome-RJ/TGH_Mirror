@@ -15,7 +15,7 @@ from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.bot_utils import new_task
 from tghbot.helper.ext_utils.db_handler import database
 from tghbot.helper.ext_utils.files_utils import clean_all
-from tghbot.helper.telegram_helper.message_utils import send_message, delete_message
+from tghbot.helper.telegram_helper.message_utils import send_message
 
 
 @new_task
