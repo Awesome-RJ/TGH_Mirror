@@ -3,7 +3,6 @@ import sys
 
 from pyrogram import Client, filters
 
-from tghbot.core.tgh_client import TgClient
 from tghbot.helper.ext_utils.bot_utils import new_task
 from tghbot.helper.telegram_helper.message_utils import send_message
 
