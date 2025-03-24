@@ -1,16 +1,29 @@
-from asyncio import gather, create_subprocess_exec
-from aiofiles import open as aiopen
-from aiofiles.os import path as aiopath, remove
+import contextlib
+from asyncio import create_subprocess_exec, gather
 from os import execl as osexecl
-from signal import signal, SIGINT
+from signal import SIGINT, signal
 from sys import executable
 from time import time
 
-from tghbot import bot, LOGGER, Intervals, DATABASE_URL, INCOMPLETE_TASK_NOTIFIER, scheduler, sabnzbd_client, STOP_DUPLICATE_TASKS
-from tghbot.helper.telegram_helper.filters import command
-from tghbot.helper.telegram_helper.message_utils import MessageHandler
+from aiofiles import open as aiopen
+from aiofiles.os import path as aiopath
+from aiofiles.os import remove
 
-from tghbot.helper.ext_utils.bot_utils import set_commands, sync_to_async, create_help_buttons
+from tghbot import (
+    DATABASE_URL,
+    INCOMPLETE_TASK_NOTIFIER,
+    LOGGER,
+    STOP_DUPLICATE_TASKS,
+    Intervals,
+    bot,
+    sabnzbd_client,
+    scheduler,
+)
+from tghbot.helper.ext_utils.bot_utils import (
+    create_help_buttons,
+    set_commands,
+    sync_to_async,
+)
 from tghbot.helper.ext_utils.db_handler import DbManager
 from tghbot.helper.ext_utils.files_utils import clean_all, exit_clean_up
 from tghbot.helper.ext_utils.jdownloader_booter import jdownloader
@@ -18,9 +31,17 @@ from tghbot.helper.ext_utils.telegraph_helper import telegraph
 from tghbot.helper.listeners.aria2_listener import start_aria2_listener
 from tghbot.helper.task_utils.rclone_utils.serve import rclone_serve_booter
 from tghbot.helper.telegram_helper.bot_commands import BotCommands
-from tghbot.helper.telegram_helper.filters import CustomFilters
-from tghbot.helper.telegram_helper.message_utils import auto_delete_message, sendMessage, editMessage, sendFile
-from tghbot.modules import anonymous, authorize, bot_settings, cancel_task, clone, exec, force_start, file_selector, gd_count, gd_delete, gd_search, help, leech_del, mirror_leech, rmdb, rss, shell, status, torrent_search, users_settings, ytdlp
+from tghbot.helper.telegram_helper.filters import CustomFilters, command
+from tghbot.helper.telegram_helper.message_utils import (
+    MessageHandler,
+    auto_delete_message,
+    editMessage,
+    sendFile,
+    sendMessage,
+)
+from tghbot.modules import (
+    torrent_search,
+)
 
 
 async def restart(_, message):
@@ -44,7 +65,12 @@ async def restart(_, message):
             sabnzbd_client.purge_all(True),
             sabnzbd_client.delete_history("all", delete_files=True),
         )
-    proc1 = await create_subprocess_exec("pkill", "-9", "-f", "gunicorn|aria2c|qbittorrent-nox|ffmpeg|rclone|java|sabnzbdplus")
+    proc1 = await create_subprocess_exec(
+        "pkill",
+        "-9",
+        "-f",
+        "gunicorn|aria2c|qbittorrent-nox|ffmpeg|rclone|java|sabnzbdplus",
+    )
     proc2 = await create_subprocess_exec("python3", "update.py")
     await gather(proc1.wait(), proc2.wait())
     async with aiopen(".restartmsg", "w") as f:
@@ -53,9 +79,9 @@ async def restart(_, message):
 
 
 async def ping(_, message):
-    start_time = int(round(time() * 1000))
+    start_time = round(time() * 1000)
     reply = await sendMessage(message, "Starting Ping")
-    end_time = int(round(time() * 1000))
+    end_time = round(time() * 1000)
     await editMessage(reply, f"{end_time - start_time} ms")
 
 
@@ -136,17 +162,26 @@ async def restart_notification():
     async def send_incomplete_task_message(cid, msg):
         try:
             if msg.startswith("Restarted Successfully!"):
-                await bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text=msg)
+                await bot.edit_message_text(
+                    chat_id=chat_id, message_id=msg_id, text=msg
+                )
                 await remove(".restartmsg")
             else:
-                await bot.send_message(chat_id=cid, text=msg, disable_web_page_preview=True, disable_notification=True)
+                await bot.send_message(
+                    chat_id=cid,
+                    text=msg,
+                    disable_web_page_preview=True,
+                    disable_notification=True,
+                )
         except Exception as e:
             LOGGER.error(e)
 
     if INCOMPLETE_TASK_NOTIFIER and DATABASE_URL:
         if notifier_dict := await DbManager().get_incomplete_tasks():
             for cid, data in notifier_dict.items():
-                msg = "Restarted Successfully!" if cid == chat_id else "Bot Restarted!"
+                msg = (
+                    "Restarted Successfully!" if cid == chat_id else "Bot Restarted!"
+                )
                 for tag, links in data.items():
                     msg += f"\n\n👤 {tag} Do your tasks again. \n"
                     for index, link in enumerate(links, start=1):
@@ -160,10 +195,10 @@ async def restart_notification():
             await DbManager().clear_download_links()
 
     if await aiopath.isfile(".restartmsg"):
-        try:
-            await bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text="Restarted Successfully!")
-        except:
-            pass
+        with contextlib.suppress(Exception):
+            await bot.edit_message_text(
+                chat_id=chat_id, message_id=msg_id, text="Restarted Successfully!"
+            )
         await remove(".restartmsg")
 
 
@@ -183,16 +218,32 @@ async def main():
     create_help_buttons()
 
     bot.add_handler(
-        MessageHandler(log, filters=command(BotCommands.LogCommand, case_sensitive=True) & CustomFilters.sudo)
+        MessageHandler(
+            log,
+            filters=command(BotCommands.LogCommand, case_sensitive=True)
+            & CustomFilters.sudo,
+        ),
     )
     bot.add_handler(
-        MessageHandler(restart, filters=command(BotCommands.RestartCommand, case_sensitive=True) & CustomFilters.sudo)
+        MessageHandler(
+            restart,
+            filters=command(BotCommands.RestartCommand, case_sensitive=True)
+            & CustomFilters.sudo,
+        ),
     )
     bot.add_handler(
-        MessageHandler(ping, filters=command(BotCommands.PingCommand, case_sensitive=True) & CustomFilters.sudo)
+        MessageHandler(
+            ping,
+            filters=command(BotCommands.PingCommand, case_sensitive=True)
+            & CustomFilters.sudo,
+        ),
     )
     bot.add_handler(
-        MessageHandler(bot_help, filters=command(BotCommands.HelpCommand, case_sensitive=True) & CustomFilters.authorized)
+        MessageHandler(
+            bot_help,
+            filters=command(BotCommands.HelpCommand, case_sensitive=True)
+            & CustomFilters.authorized,
+        ),
     )
     LOGGER.info("Bot Started Successfully!")
     signal(SIGINT, exit_clean_up)
