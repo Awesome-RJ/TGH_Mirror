@@ -163,7 +163,9 @@ async def restart_notification():
         try:
             if msg.startswith("Restarted Successfully!"):
                 await bot.edit_message_text(
-                    chat_id=chat_id, message_id=msg_id, text=msg
+                    chat_id=chat_id,
+                    message_id=msg_id,
+                    text=msg,
                 )
                 await remove(".restartmsg")
             else:
@@ -197,7 +199,9 @@ async def restart_notification():
     if await aiopath.isfile(".restartmsg"):
         with contextlib.suppress(Exception):
             await bot.edit_message_text(
-                chat_id=chat_id, message_id=msg_id, text="Restarted Successfully!"
+                chat_id=chat_id,
+                message_id=msg_id,
+                text="Restarted Successfully!",
             )
         await remove(".restartmsg")
 
