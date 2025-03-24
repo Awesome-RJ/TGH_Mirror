@@ -138,7 +138,7 @@ subprocess.run(
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
 
 
-BOT_TOKEN = environ.get(
+BOT_TOKEN = config_file.get(
     "BOT_TOKEN",
     ""
 )
@@ -151,7 +151,7 @@ BOT_ID = BOT_TOKEN.split(
     1
 )[0]
 
-DATABASE_URL = environ.get(
+DATABASE_URL = config_file.get(
     "DATABASE_URL",
     ""
 )
@@ -216,7 +216,7 @@ if DATABASE_URL:
             with open(f"sabnzbd/{file_}", "wb+") as f:
                 f.write(value)
         conn.close()
-        BOT_TOKEN = environ.get(
+        BOT_TOKEN = config_file.get(
             "BOT_TOKEN",
             ""
         )
@@ -224,7 +224,7 @@ if DATABASE_URL:
             ":",
             1
         )[0]
-        DATABASE_URL = environ.get(
+        DATABASE_URL = config_file.get(
             "DATABASE_URL",
             ""
 )
