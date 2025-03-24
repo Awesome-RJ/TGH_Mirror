@@ -1,8 +1,7 @@
 import os
 import sys
 
-from pyrogram import Client, filters
-
+from pyrogram.filters import command, regex
 from tghbot.helper.ext_utils.bot_utils import new_task
 from tghbot.helper.telegram_helper.message_utils import send_message
 
