@@ -134,6 +134,10 @@ subprocess.run(
     check=False,
 )
 
+
+scheduler = AsyncIOScheduler(event_loop=bot_loop)
+
+
 BOT_TOKEN = environ.get(
     "BOT_TOKEN",
     ""
@@ -225,4 +229,3 @@ if DATABASE_URL:
             ""
 )
 
-scheduler = AsyncIOScheduler(event_loop=bot_loop)
