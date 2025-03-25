@@ -6,7 +6,7 @@ RUN chmod 777 /usr/src/app
 # Install python3-venv package
 RUN apt-get update && apt-get install -y python3-venv
 
-# Create and activate the virtual environment
+# Create the virtual environment
 RUN python3 -m venv tgh-env
 
 # Install dependencies
