@@ -12,15 +12,15 @@ WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 
 # Ensure tgh-env script is copied and executable
-COPY tgh-env /usr/local/bin/
-RUN chmod +x /usr/local/bin/tgh-env
+COPY tgh-env /usr/src/app/tgh-env
+RUN chmod +x /usr/src/app/tgh-env
 
 # Run tgh-env command
-RUN tgh-env
+RUN /usr/src/app/tgh-env
 
 # Copy requirements.txt and install Python dependencies
 COPY requirements.txt .
-RUN tgh-env pip install --no-cache-dir -r requirements.txt
+RUN /usr/src/app/tgh-env pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
