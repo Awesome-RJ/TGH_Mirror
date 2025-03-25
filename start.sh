@@ -4,7 +4,7 @@
 cd /root/TGH_Mirror/tghbot
 
 # Activate the virtual environment
-source /usr/src/app/tgh-env
+source tgh-env/bin/activate 
 
 # Install the requirements
 /usr/src/app/tgh-env pip install -r requirements.txt
