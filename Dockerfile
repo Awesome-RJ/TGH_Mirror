@@ -11,19 +11,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 
-# Ensure tgh-env script is copied and executable
-COPY tgh-env /usr/src/app/tgh-env
-RUN chmod +x /usr/src/app/tgh-env
-
-# Run tgh-env command
-RUN /usr/src/app/tgh-env
-
-# Copy requirements.txt and install Python dependencies
+RUN uv venv
 COPY requirements.txt .
-RUN /usr/src/app/tgh-env pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
 COPY . .
-
-# Set the default command to run the application
 CMD ["bash", "start.sh"]
