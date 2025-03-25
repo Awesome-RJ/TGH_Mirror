@@ -3,13 +3,15 @@ FROM 5hojib/aeon:latest
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 
+# Install python3-venv package
+RUN apt-get update && apt-get install -y python3-venv
+
 # Create and activate the virtual environment
 RUN python3 -m venv tgh-env
-RUN tgh-env/bin/activate
 
 # Install dependencies
 COPY requirements.txt .
-RUN tgh-env/bin/activate && pip install --no-cache-dir -r requirements.txt
+RUN /bin/bash -c "source tgh-env/bin/activate && pip install --no-cache-dir -r requirements.txt"
 
 COPY . .
 
