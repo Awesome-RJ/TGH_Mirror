@@ -1,19 +1,27 @@
 FROM ubuntu:22.04
 
-WORKDIR /usr/src/app
-RUN chmod 777 /usr/src/app
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-venv \
+    python3-pip \
+    nano \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create and activate the virtual environment
-RUN python3 -m venv tgh-env
-RUN tgh-env/bin/activate
+WORKDIR /root/TGH_Mirror/tghbot
 
-# Install dependencies
-COPY requirements.txt .
-RUN tgh-env/bin/activate && pip install --no-cache-dir -r requirements.txt
+# Copy requirements.txt to the tghbot directory
+COPY requirements.txt ../requirements.txt
 
+# Create and activate the virtual environment, then install dependencies
+RUN python3 -m venv tgh-env \
+    && source tgh-env/bin/activate \
+    && pip install --no-cache-dir -r ../requirements.txt
+
+# Copy the rest of the application code
 COPY . .
 
-# Update the start.sh to activate the virtual environment
-RUN echo "source /usr/src/app/tgh-env/bin/activate" > /usr/src/app/start.sh
+# Ensure start.sh is executable
+RUN chmod +x /root/TGH_Mirror/start.sh
 
 CMD ["bash", "start.sh"]
