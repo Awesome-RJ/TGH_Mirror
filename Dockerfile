@@ -8,20 +8,12 @@ RUN apt-get update && apt-get install -y \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /root/TGH_Mirror/tghbot
+WORKDIR /usr/src/app
+RUN chmod 777 /usr/src/app
 
-# Copy requirements.txt to the tghbot directory
-COPY requirements.txt ../requirements.txt
+RUN tgh-env
+COPY requirements.txt .
+RUN tgh-env pip install --no-cache-dir -r requirements.txt
 
-# Create and activate the virtual environment, then install dependencies
-RUN python3 -m venv tgh-env \
-    && source tgh-env/bin/activate \
-    && pip install --no-cache-dir -r ../requirements.txt
-
-# Copy the rest of the application code
 COPY . .
-
-# Ensure start.sh is executable
-RUN chmod +x /root/TGH_Mirror/start.sh
-
 CMD ["bash", "start.sh"]
