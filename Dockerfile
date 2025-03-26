@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 
-COPY extract
+COPY extract .
 
 COPY requirements.txt .
 
