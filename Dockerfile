@@ -16,7 +16,7 @@ COPY extract .
 # Install additional system dependencies
 RUN apt-get update && apt-get install -y \
 aioaria2==1.3.6
-aiofiles==24.1.0
+#aiofiles==24.1.0
 aiohappyeyeballs==2.6.1
 aiohttp==3.11.14
 aioqbt==1.0.0
