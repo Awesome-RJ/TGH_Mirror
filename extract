@@ -113,3 +113,14 @@ xattr==1.1.4
 yarl==1.18.3
 yt-dlp==2025.3.25
 }
+
+# Main script execution
+main() {
+    update_system
+    install_python
+    install_dependencies
+    install_requirements
+    cleanup
+}
+
+main
