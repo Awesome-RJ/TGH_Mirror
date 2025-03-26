@@ -15,6 +15,9 @@ RUN chmod 777 /usr/src/app
 COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
+# Install setuptools
+RUN pip install --upgrade setuptools
+
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r tghbot/requirements.txt
