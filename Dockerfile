@@ -4,8 +4,8 @@ FROM ubuntu:22.04
 # Install required packages
 RUN apt-get update && apt-get install -y \
     python3 \
-    python3.13-venv \
-    python3.13-pip \
+    python3-venv \
+    python3-pip \
     nano \
     && rm -rf /var/lib/apt/lists/*
 
