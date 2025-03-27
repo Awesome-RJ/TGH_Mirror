@@ -18,7 +18,7 @@ COPY tghbot/requirements.txt ./tghbot/
 
 # Install setuptools and xnox
 RUN pip install --upgrade setuptools
-RUN pip install xnox
+RUN chmod 700 /usr/local/bin/xnox
 
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
