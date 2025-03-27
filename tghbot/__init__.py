@@ -25,7 +25,6 @@ from pytz import timezone
 from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
-
 from tghbot.core.config_manager import BinConfig
 
 getLogger("requests").setLevel(WARNING)
