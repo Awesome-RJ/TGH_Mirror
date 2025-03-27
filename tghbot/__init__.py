@@ -25,7 +25,6 @@ from pytz import timezone
 from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
-from tghbot.core.config_manager import BinConfig
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
@@ -116,6 +115,24 @@ sabnzbd_client = SabnzbdClient(
     api_key="admin",
     port="8070",
 )
-srun([BinConfig.QBIT_NAME, "-d", f"--profile={getcwd()}"], check=False)
+subprocess.run(["xnox", "-d", f"--profile={os.getcwd()}"], check=False)
+subprocess.run(
+    [
+        "xnzb",
+        "-f",
+        "sabnzbd/SABnzbd.ini",
+        "-s",
+        ":::8070",
+        "-b",
+        "0",
+        "-d",
+        "-c",
+        "-l",
+        "0",
+        "--console",
+    ],
+    check=False,
+)
+
 
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
