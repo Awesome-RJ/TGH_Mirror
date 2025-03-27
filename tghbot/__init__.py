@@ -26,7 +26,7 @@ from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
 
-from .core.config_manager import BinConfig
+from tghbot.core.config_manager import BinConfig
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
