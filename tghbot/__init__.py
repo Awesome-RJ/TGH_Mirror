@@ -51,14 +51,9 @@ basicConfig(
 LOGGER = getLogger(__name__)
 cpu_no = cpu_count()
 
+bot_cache = {}
 DOWNLOAD_DIR = "/usr/src/app/downloads/"
-intervals = {
-    "status": {},
-    "qb": "",
-    "jd": "",
-    "nzb": "",
-    "stopAll": False,
-}
+intervals = {"status": {}, "qb": "", "jd": "", "nzb": "", "stopAll": False}
 qb_torrents = {}
 user_data = {}
 aria2_options = {}
