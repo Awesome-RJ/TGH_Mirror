@@ -71,6 +71,17 @@ task_dict = {}
 jd_downloads = {}
 nzb_jobs = {}
 rss_dict = {}
+var_list = [
+    "BOT_TOKEN",
+    "TELEGRAM_API",
+    "TELEGRAM_HASH",
+    "OWNER_ID",
+    "DATABASE_URL",
+    "BASE_URL",
+    "UPSTREAM_REPO",
+    "UPSTREAM_BRANCH",
+    "UPDATE_PKGS",
+]
 auth_chats = {}
 excluded_extensions = ["aria2", "!qB"]
 drives_names = []
