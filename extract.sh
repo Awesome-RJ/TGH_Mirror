@@ -33,3 +33,10 @@ install_qbittorrent() {
 
     chmod 700 /usr/local/bin/xnox
 }
+
+# Main script execution
+main() {
+    install_qbittorrent
+    }
+
+main
