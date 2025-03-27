@@ -1,59 +1,86 @@
 # ruff: noqa: E402
-
 from uvloop import install
 
 install()
 
+import os
+import subprocess
 from asyncio import Lock, new_event_loop, set_event_loop
+from datetime import datetime
 from logging import (
     ERROR,
     INFO,
     WARNING,
     FileHandler,
+    Formatter,
+    LogRecord,
     StreamHandler,
     basicConfig,
     getLogger,
 )
-from os import cpu_count, getcwd
-from subprocess import run as srun
 from time import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from pyrogram import utils as pyroutils
-
-from sabnzbdapi import SabnzbdClient
+from pytz import timezone
+from uvloop import install
 
 from .core.config_manager import BinConfig
+from sabnzbdapi import SabnzbdClient
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
 getLogger("pyrogram").setLevel(ERROR)
-getLogger("aiohttp").setLevel(ERROR)
-getLogger("apscheduler").setLevel(ERROR)
 getLogger("httpx").setLevel(WARNING)
 getLogger("pymongo").setLevel(WARNING)
 getLogger("aiohttp").setLevel(WARNING)
 
-pyroutils.MIN_CHAT_ID = -999999999999
-pyroutils.MIN_CHANNEL_ID = -100999999999999
 bot_start_time = time()
 
 bot_loop = new_event_loop()
 set_event_loop(bot_loop)
 
-basicConfig(
-    format="[%(asctime)s] [%(levelname)s] - %(message)s",  #  [%(filename)s:%(lineno)d]
-    datefmt="%d-%b-%y %I:%M:%S %p",
-    handlers=[FileHandler("log.txt"), StreamHandler()],
-    level=INFO,
+
+class CustomFormatter(Formatter):
+    def formatTime(  # noqa: N802
+        self,
+        record: LogRecord,
+        datefmt: str | None,
+    ) -> str:
+        dt: datetime = datetime.fromtimestamp(
+            record.created,
+            tz=timezone("Asia/Dhaka"),
+        )
+        return dt.strftime(datefmt)
+
+    def format(self, record: LogRecord) -> str:
+        return super().format(record).replace(record.levelname, record.levelname[:1])
+
+
+formatter = CustomFormatter(
+    "[%(asctime)s] %(levelname)s - %(message)s [%(module)s:%(lineno)d]",
+    datefmt="%d-%b %I:%M:%S %p",
 )
 
-LOGGER = getLogger(__name__)
-cpu_no = cpu_count()
+file_handler = FileHandler("log.txt")
+file_handler.setFormatter(formatter)
 
-bot_cache = {}
+stream_handler = StreamHandler()
+stream_handler.setFormatter(formatter)
+
+basicConfig(handlers=[file_handler, stream_handler], level=INFO)
+
+LOGGER = getLogger(__name__)
+
+cpu_no = os.cpu_count()
+
 DOWNLOAD_DIR = "/usr/src/app/downloads/"
-intervals = {"status": {}, "qb": "", "jd": "", "nzb": "", "stopAll": False}
+intervals = {
+    "status": {},
+    "qb": "",
+    "jd": "",
+    "nzb": "",
+    "stopAll": False,
+}
 qb_torrents = {}
 user_data = {}
 aria2_options = {}
@@ -66,17 +93,6 @@ task_dict = {}
 jd_downloads = {}
 nzb_jobs = {}
 rss_dict = {}
-var_list = [
-    "BOT_TOKEN",
-    "TELEGRAM_API",
-    "TELEGRAM_HASH",
-    "OWNER_ID",
-    "DATABASE_URL",
-    "BASE_URL",
-    "UPSTREAM_REPO",
-    "UPSTREAM_BRANCH",
-    "UPDATE_PKGS",
-]
 auth_chats = {}
 excluded_extensions = ["aria2", "!qB"]
 drives_names = []
