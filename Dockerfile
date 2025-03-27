@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     python3-pip \
     nano \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
@@ -15,8 +16,9 @@ RUN chmod 777 /usr/src/app
 COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
-# Install setuptools
+# Install setuptools and xnox
 RUN pip install --upgrade setuptools
+RUN pip install xnox
 
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -26,6 +28,4 @@ RUN pip install --no-cache-dir -r tghbot/requirements.txt
 COPY . .
 
 # Set the default command to execute
-RUN bash extract.sh
-
 CMD ["bash", "start.sh"]
