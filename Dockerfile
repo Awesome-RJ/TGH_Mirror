@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     nano \
     git \
     && rm -rf /var/lib/apt/lists/*
-
+    
 WORKDIR /usr/src/app
 RUN chmod 777 /usr/src/app
 
@@ -16,9 +16,8 @@ RUN chmod 777 /usr/src/app
 COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
-# Install setuptools and xnox
+# Install setuptools
 RUN pip install --upgrade setuptools
-RUN chmod 700 /usr/local/bin/xnox
 
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
@@ -28,4 +27,6 @@ RUN pip install --no-cache-dir -r tghbot/requirements.txt
 COPY . .
 
 # Set the default command to execute
+RUN bash extract.sh
+
 CMD ["bash", "start.sh"]
