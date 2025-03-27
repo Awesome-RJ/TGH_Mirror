@@ -51,12 +51,15 @@ basicConfig(
 LOGGER = getLogger(__name__)
 cpu_no = cpu_count()
 
-bot_cache = {}
 DOWNLOAD_DIR = "/usr/src/app/downloads/"
-intervals = {"status": {}, "qb": "", "jd": "", "nzb": "", "stopAll": False}
+intervals = {
+    "status": {},
+    "qb": "",
+    "jd": "",
+    "nzb": "",
+    "stopAll": False,
+}
 qb_torrents = {}
-jd_downloads = {}
-nzb_jobs = {}
 user_data = {}
 aria2_options = {}
 qbit_options = {}
@@ -65,19 +68,9 @@ queued_dl = {}
 queued_up = {}
 status_dict = {}
 task_dict = {}
+jd_downloads = {}
+nzb_jobs = {}
 rss_dict = {}
-shortener_dict = {}
-var_list = [
-    "BOT_TOKEN",
-    "TELEGRAM_API",
-    "TELEGRAM_HASH",
-    "OWNER_ID",
-    "DATABASE_URL",
-    "BASE_URL",
-    "UPSTREAM_REPO",
-    "UPSTREAM_BRANCH",
-    "UPDATE_PKGS",
-]
 auth_chats = {}
 excluded_extensions = ["aria2", "!qB"]
 drives_names = []
@@ -90,10 +83,10 @@ multi_tags = set()
 task_dict_lock = Lock()
 queue_dict_lock = Lock()
 qb_listener_lock = Lock()
-nzb_listener_lock = Lock()
-jd_listener_lock = Lock()
 cpu_eater_lock = Lock()
 same_directory_lock = Lock()
+nzb_listener_lock = Lock()
+jd_listener_lock = Lock()
 shorteners_list = []
 
 sabnzbd_client = SabnzbdClient(
