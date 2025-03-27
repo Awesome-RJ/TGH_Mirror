@@ -4,8 +4,6 @@ from uvloop import install
 
 install()
 
-from subprocess import run as srun
-from os import getcwd
 from asyncio import Lock, new_event_loop, set_event_loop
 from logging import (
     ERROR,
@@ -16,14 +14,16 @@ from logging import (
     basicConfig,
     getLogger,
 )
-from os import cpu_count
+from os import cpu_count, getcwd
+from subprocess import run as srun
 from time import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import utils as pyroutils
 
-from .core.config_manager import BinConfig
 from sabnzbdapi import SabnzbdClient
+
+from .core.config_manager import BinConfig
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
