@@ -24,8 +24,9 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 from uvloop import install
 
-from .core.config_manager import BinConfig
 from sabnzbdapi import SabnzbdClient
+
+from .core.config_manager import BinConfig
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
