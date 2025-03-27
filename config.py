@@ -1,6 +1,6 @@
 # REQUIRED CONFIG
 BOT_TOKEN = "7713486921:AAF4akLKvq-XUZnJg6DBy-nFeRn0GHwa3Hs" # Enter your telegram bot token
-OWNER_ID = 6200648859 # Enter your telegram user id
+OWNER_ID = 1606221784 # Enter your telegram user id
 TELEGRAM_API = 3975570 # Enter telegram API key
 TELEGRAM_HASH = "680b62f2844aa1954216f6cb99d2f3d9" # Enter telegram API hash
 
