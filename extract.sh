@@ -116,7 +116,7 @@ cleanup() {
     apt-get autoremove -y
     apt-get autoclean -y
 
-    rm -rf /Temp Aeon Dockerfile
+    rm -rf /Temp tghbot Dockerfile
 }
 
 # Main script execution
