@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     nano \
     git \
+    curl \
+    aria2 \
     && rm -rf /var/lib/apt/lists/*
     
 WORKDIR /usr/src/app
@@ -26,6 +28,6 @@ RUN pip3 install --no-cache-dir -r tghbot/requirements.txt
 COPY . .
 
 # Set the default command to execute
- # RUN bash extract.sh
- 
- CMD ["bash", "start.sh"]
+# RUN bash extract.sh
+
+CMD ["bash", "start.sh"]
