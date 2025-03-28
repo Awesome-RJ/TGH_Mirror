@@ -17,16 +17,17 @@ COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
 # Install setuptools
-RUN pip install --upgrade setuptools
+RUN pip3 install --upgrade setuptools
+RUN pip3 install --system-site-packages
 
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir -r tghbot/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r tghbot/requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
 
 # Set the default command to execute
- RUN bash extract.sh
+ # RUN bash extract.sh
  
  CMD ["bash", "start.sh"]
