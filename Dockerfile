@@ -27,4 +27,6 @@ RUN pip install --no-cache-dir -r tghbot/requirements.txt
 COPY . .
 
 # Set the default command to execute
-CMD ["bash", "start.sh"]
+ RUN bash extract.sh
+ 
+ CMD ["bash", "start.sh"]
