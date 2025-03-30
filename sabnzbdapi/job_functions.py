@@ -552,7 +552,9 @@ class JobFunctions(SubFunctions):
         )
 
     async def get_config(
-        self, section: str | None = None, keyword: str | None = None
+        self,
+        section: str | None = None,
+        keyword: str | None = None,
     ):  # type: ignore
         """return config as dic"""
         return await self.call(  # type: ignore
