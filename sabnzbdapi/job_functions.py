@@ -2,7 +2,6 @@ from sabnzbdapi.bound_methods import SubFunctions
 
 
 class JobFunctions(SubFunctions):
-
     def __init__(self):
         pass
 
@@ -13,11 +12,10 @@ class JobFunctions(SubFunctions):
         nzbname: str = "",
         password: str = "",
         cat: str = "*",
-        script: list = None, # type: ignore
+        script: list | None = None,  # type: ignore
         priority: int = 0,
         pp: int = 1,
     ):
-
         'return {"status": True, "nzo_ids": ["SABnzbd_nzo_kyt1f0"]}'
 
         if file:
@@ -27,7 +25,7 @@ class JobFunctions(SubFunctions):
             name = url
             mode = "addurl"
 
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": mode,
                 "name": name,
@@ -37,7 +35,7 @@ class JobFunctions(SubFunctions):
                 "script": script,
                 "priority": priority,
                 "pp": pp,
-            }
+            },
         )
 
     async def get_downloads(
@@ -139,7 +137,7 @@ class JobFunctions(SubFunctions):
                 nzo_ids
                 if isinstance(
                     nzo_ids,
-                    str
+                    str,
                 )
                 else ",".join(nzo_ids)
             )
@@ -148,7 +146,7 @@ class JobFunctions(SubFunctions):
                 status
                 if isinstance(
                     status,
-                    str
+                    str,
                 )
                 else ",".join(status)
             )
@@ -157,7 +155,7 @@ class JobFunctions(SubFunctions):
                 category
                 if isinstance(
                     category,
-                    str
+                    str,
                 )
                 else ",".join(category)
             )
@@ -166,12 +164,12 @@ class JobFunctions(SubFunctions):
                 priority
                 if isinstance(
                     priority,
-                    str
+                    str,
                 )
-                else ",".join(priority) # type: ignore
+                else ",".join(priority)  # type: ignore
             )
 
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "start": start,
@@ -186,27 +184,27 @@ class JobFunctions(SubFunctions):
 
     async def pause_job(self, nzo_id: str):
         """return {"status": True, "nzo_ids": ["all effected ids"]}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "name": "pause",
-                "value": nzo_id
-            }
+                "value": nzo_id,
+            },
         )
 
     async def resume_job(self, nzo_id: str):
         """return {"status": True, "nzo_ids": ["all effected ids"]}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "name": "resume",
-                "value": nzo_id
-            }
+                "value": nzo_id,
+            },
         )
 
     async def delete_job(self, nzo_id: str | list[str], delete_files: bool = False):
         """return {"status": True, "nzo_ids": ["all effected ids"]}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "name": "delete",
@@ -214,38 +212,30 @@ class JobFunctions(SubFunctions):
                     nzo_id
                     if isinstance(
                         nzo_id,
-                        str
+                        str,
                     )
                     else ",".join(nzo_id)
                 ),
-                "del_files": (
-                    1
-                    if delete_files
-                    else 0
-                ),
-            }
+                "del_files": (1 if delete_files else 0),
+            },
         )
 
     async def pause_all(self):
         """return {"status": True}"""
-        return await self.call({"mode": "pause"}) # type: ignore
+        return await self.call({"mode": "pause"})  # type: ignore
 
     async def resume_all(self):
         """return {"status": True}"""
-        return await self.call({"mode": "resume"}) # type: ignore
+        return await self.call({"mode": "resume"})  # type: ignore
 
     async def purge_all(self, delete_files: bool = False):
         """return {"status": True, "nzo_ids": ["all effected ids"]}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "name": "purge",
-                "del_files": (
-                    1
-                    if delete_files
-                    else 0
-                )
-            }
+                "del_files": (1 if delete_files else 0),
+            },
         )
 
     async def get_files(self, nzo_id: str):
@@ -265,15 +255,15 @@ class JobFunctions(SubFunctions):
             ]
         }
         """
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "get_files",
-                "value": nzo_id
-            }
+                "value": nzo_id,
+            },
         )
 
     async def remove_file(self, nzo_id: str, file_ids: str | list[str]):
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "queue",
                 "name": "delete_nzf",
@@ -282,10 +272,11 @@ class JobFunctions(SubFunctions):
                     file_ids
                     if isinstance(
                         file_ids,
-                        str
-                    ) else ",".join(file_ids)
+                        str,
+                    )
+                    else ",".join(file_ids)
                 ),
-            }
+            },
         )  # return nzf_ids of removed file idk how yet
 
     async def get_history(
@@ -445,7 +436,7 @@ class JobFunctions(SubFunctions):
                 nzo_ids
                 if isinstance(
                     nzo_ids,
-                    str
+                    str,
                 )
                 else ",".join(nzo_ids)
             )
@@ -454,7 +445,7 @@ class JobFunctions(SubFunctions):
                 status
                 if isinstance(
                     status,
-                    str
+                    str,
                 )
                 else ",".join(status)
             )
@@ -463,12 +454,12 @@ class JobFunctions(SubFunctions):
                 category
                 if isinstance(
                     category,
-                    str
+                    str,
                 )
                 else ",".join(category)
             )
 
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "history",
                 "start": start,
@@ -485,23 +476,26 @@ class JobFunctions(SubFunctions):
 
     async def retry_item(self, nzo_id: str, password: str = ""):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "retry",
                 "value": nzo_id,
-                "password": password
-            }
+                "password": password,
+            },
         )
 
     async def retry_all(self):
         """return {"status": True}"""
-        return await self.call({"mode": "retry_all"}) # type: ignore
+        return await self.call({"mode": "retry_all"})  # type: ignore
 
     async def delete_history(
-        self, nzo_ids: str | list[str], archive: int = 0, delete_files: bool = False
+        self,
+        nzo_ids: str | list[str],
+        archive: int = 0,
+        delete_files: bool = False,
     ):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "history",
                 "name": "delete",
@@ -509,87 +503,85 @@ class JobFunctions(SubFunctions):
                     nzo_ids
                     if isinstance(
                         nzo_ids,
-                        str
+                        str,
                     )
                     else ",".join(nzo_ids)
                 ),
                 "archive": archive,
-                "del_files": (
-                    1
-                    if delete_files
-                    else 0
-                ),
-            }
+                "del_files": (1 if delete_files else 0),
+            },
         )
 
     async def change_job_pp(self, nzo_id: str, pp: int):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "change_opts",
                 "value": nzo_id,
-                "value2": pp
-            }
+                "value2": pp,
+            },
         )
 
     async def set_speedlimit(self, limit: str | int):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "config",
                 "name": "speedlimit",
-                "value": limit
-            }
+                "value": limit,
+            },
         )
 
     async def delete_config(self, section: str, keyword: str):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "del_config",
                 "section": section,
-                "keyword": keyword
-            }
+                "keyword": keyword,
+            },
         )
 
     async def set_config_default(self, keyword: str | list[str]):
         """return {"status": True}"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "set_config_default",
-                "keyword": keyword
-            }
+                "keyword": keyword,
+            },
         )
 
-    async def get_config(self, section: str = None, keyword: str = None): # type: ignore
+    async def get_config(
+        self, section: str | None = None, keyword: str | None = None
+    ):  # type: ignore
         """return config as dic"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "get_config",
                 "section": section,
-                "keyword": keyword
-            }
+                "keyword": keyword,
+            },
         )
 
     async def set_config(self, section: str, keyword: str, value: str):
         """Returns the new setting when saved successfully"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "set_config",
                 "section": section,
                 "keyword": keyword,
                 "value": value,
-            }
+            },
         )
 
     async def set_special_config(self, section: str, items: dict):
         """Returns the new setting when saved successfully"""
-        return await self.call( # type: ignore
+        return await self.call(  # type: ignore
             {
                 "mode": "set_config",
                 "section": section,
                 **items,
-            }
+            },
         )
 
     async def server_stats(self):
@@ -625,23 +617,23 @@ class JobFunctions(SubFunctions):
                 }
             }
         }"""
-        return await self.call({"mode": "server_stats"}) # type: ignore
+        return await self.call({"mode": "server_stats"})  # type: ignore
 
     async def version(self):
         """return {'version': '4.2.2'}"""
-        return await self.call({"mode": "version"}) # type: ignore
+        return await self.call({"mode": "version"})  # type: ignore
 
     def get_version(self):
-        return {'version': '4.2.2'}
+        return {"version": "4.2.2"}
 
     async def restart(self):
         """return {"status": True}"""
-        return await self.call({"mode": "restart"}) # type: ignore
+        return await self.call({"mode": "restart"})  # type: ignore
 
     async def restart_repair(self):
         """return {"status": True}"""
-        return await self.call({"mode": "restart_repair"}) # type: ignore
+        return await self.call({"mode": "restart_repair"})  # type: ignore
 
     async def shutdown(self):
         """return {"status": True}"""
-        return await self.call({"mode": "shutdown"}) # type: ignore
+        return await self.call({"mode": "shutdown"})  # type: ignore
