@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
 && rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Kolkata
+# ENV TZ=Asia/Kolkata
 RUN mkdir ./app
 RUN chmod 777 ./app
 WORKDIR /app
