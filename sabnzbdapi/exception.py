@@ -1,4 +1,7 @@
-from httpx import DecodingError, RequestError
+from httpx import (
+    RequestError,
+    DecodingError
+)
 
 
 class APIError(Exception):
