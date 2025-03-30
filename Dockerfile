@@ -2,9 +2,10 @@ FROM ubuntu:22.04
 
 # Install required packages
 RUN apt-get update && apt-get install -y \
-RUN mkdir ./app
-RUN chmod 777 ./app
-WORKDIR /app
+    python3 \
+    python3-venv \
+    python3-pip \
+
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Kolkata
