@@ -1,5 +1,5 @@
 from sabnzbdapi.bound_methods import SubFunctions
-from typing import List, Union, Optional
+
 
 class JobFunctions(SubFunctions):
     async def add_uri(
@@ -9,7 +9,7 @@ class JobFunctions(SubFunctions):
         nzbname: str = "",
         password: str = "",
         cat: str = "*",
-        script: Optional[List] = None,
+        script: list | None = None,
         priority: int = 0,
         pp: int = 1,
     ):
@@ -37,13 +37,13 @@ class JobFunctions(SubFunctions):
 
     async def get_downloads(
         self,
-        start: Optional[int] = None,
-        limit: Optional[int] = None,
-        search: Optional[str] = None,
-        category: Union[str, List[str], None] = None,
-        priority: Union[int, List[int], None] = None,
-        status: Union[str, List[str], None] = None,
-        nzo_ids: Union[str, List[str], None] = None,
+        start: int | None = None,
+        limit: int | None = None,
+        search: str | None = None,
+        category: str | list[str] | None = None,
+        priority: int | list[int] | None = None,
+        status: str | list[str] | None = None,
+        nzo_ids: str | list[str] | None = None,
     ):
         """return {
             "queue": {
