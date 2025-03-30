@@ -3,7 +3,7 @@
 tracker_list=$(curl -Ns https://ngosang.github.io/trackerslist/trackers_all_http.txt | 
                awk '$0' | tr '\n\n' ',')
 
-xria \
+xria2 \
     --allow-overwrite=true \
     --auto-file-renaming=true \
     --bt-enable-lpd=true \
