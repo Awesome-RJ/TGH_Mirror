@@ -5,17 +5,20 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-venv \
     python3-pip \
-
+&& rm -rf /var/lib/apt/lists/*
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Kolkata
+RUN mkdir ./app
+RUN chmod 777 ./app
+WORKDIR /app
+
 
 RUN apt -qq update --fix-missing && \
     apt -qq install -y git \
     aria2 \
     wget \
     curl \
-    busybox \
     unzip \
     unrar \
     tar \
