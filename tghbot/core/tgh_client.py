@@ -15,6 +15,7 @@ class TgClient:
     IS_PREMIUM_USER = False
     MAX_SPLIT_SIZE = 2097152000
 
+    class TgClient:
     @classmethod
     async def start_bot(cls):
         LOGGER.info("Creating client from BOT_TOKEN")
@@ -30,7 +31,7 @@ class TgClient:
         )
         await cls.bot.start()
         cls.NAME = cls.bot.me.username
-
+    
     @classmethod
     async def start_user(cls):
         if Config.USER_SESSION_STRING:
