@@ -52,6 +52,8 @@ COPY . .
 RUN chmod +x aria.sh
 
 # Check and ensure the database file exists and has correct permissions
-
+COPY entrypoint.sh /entrypoint.sh
+ RUN chmod +x /entrypoint.sh
+ ENTRYPOINT ["/entrypoint.sh"]
 # Set the default command to execute
 CMD ["bash", "start.sh"]
