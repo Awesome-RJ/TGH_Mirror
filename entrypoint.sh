@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATABASE_PATH="/path/to/your/database/file.db"  # Update with your actual database file path
+DATABASE_PATH="mongodb+srv://hunter123:hunter123@cluster0.iueac.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Update with your actual database file path
 
 # Check if the database file exists
 if [ ! -f "$DATABASE_PATH" ]; then
