@@ -1,15 +1,12 @@
 #!/bin/bash
 
-DATABASE_PATH="mongodb+srv://hunter123:hunter123@cluster0.iueac.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Update with your actual database file path
+DATABASE_URL="mongodb+srv://hunter123:hunter123@cluster0.iueac.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"  # Update with your actual database URL
 
-# Check if the database file exists
-if [ ! -f "$DATABASE_PATH" ]; then
-    echo "Error: Database file does not exist at $DATABASE_PATH"
+# Attempt to connect to the database
+if ! mongo "$DATABASE_URL" --eval "db.stats()" >/dev/null 2>&1; then
+    echo "Error: Unable to connect to the database at $DATABASE_URL"
     exit 1
 fi
-
-# Ensure the file has correct permissions
-chmod 664 "$DATABASE_PATH"
 
 # Execute the main command
 exec "$@"
