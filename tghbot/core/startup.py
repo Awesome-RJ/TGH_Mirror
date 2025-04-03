@@ -24,8 +24,8 @@ from tghbot import (
 )
 from tghbot.helper.ext_utils.db_handler import database
 
-from .tgh_client import TgClient
 from .config_manager import Config
+from .tgh_client import TgClient
 from .torrent_manager import TorrentManager
 
 
