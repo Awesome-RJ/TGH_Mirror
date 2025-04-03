@@ -3,7 +3,8 @@ from asyncio import Lock
 from pyrogram import Client, enums
 
 from tghbot import LOGGER
-from tghbot.core.config_manager import Config
+
+from .config_manager import Config
 
 
 class TgClient:
@@ -15,7 +16,6 @@ class TgClient:
     IS_PREMIUM_USER = False
     MAX_SPLIT_SIZE = 2097152000
 
-    class TgClient:
     @classmethod
     async def start_bot(cls):
         LOGGER.info("Creating client from BOT_TOKEN")
@@ -28,10 +28,11 @@ class TgClient:
             bot_token=Config.BOT_TOKEN,
             workdir="/usr/src/app",
             parse_mode=enums.ParseMode.HTML,
+            max_concurrent_transmissions=10,
         )
         await cls.bot.start()
         cls.NAME = cls.bot.me.username
-    
+
     @classmethod
     async def start_user(cls):
         if Config.USER_SESSION_STRING:
@@ -45,6 +46,7 @@ class TgClient:
                     session_string=Config.USER_SESSION_STRING,
                     parse_mode=enums.ParseMode.HTML,
                     no_updates=True,
+                    max_concurrent_transmissions=10,
                 )
                 await cls.user.start()
                 cls.IS_PREMIUM_USER = cls.user.me.is_premium
