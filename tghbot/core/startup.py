@@ -27,6 +27,7 @@ from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
 
+
 async def update_qb_options():
     if not qbit_options:
         opt = await TorrentManager.qbittorrent.app.preferences()
