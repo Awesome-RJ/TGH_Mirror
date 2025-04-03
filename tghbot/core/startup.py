@@ -22,10 +22,11 @@ from tghbot import (
     sudo_users,
     user_data,
 )
-from tghbot.core.config_manager import Config
-from tghbot.core.tgh_client import TgClient
-from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
+
+from .tgh_client import TgClient
+from .config_manager import Config
+from .torrent_manager import TorrentManager
 
 
 async def update_qb_options():
@@ -234,14 +235,9 @@ async def update_variables():
                 auth_chats[chat_id] = []
 
     if Config.SUDO_USERS:
-        if isinstance(Config.SUDO_USERS, str):
-            aid = Config.SUDO_USERS.split()
-            for id_ in aid:
-                sudo_users.append(int(id_.strip()))
-        else:
-            # Handle case where SUDO_USERS is already a tuple/list
-            for id_ in Config.SUDO_USERS:
-                sudo_users.append(int(id_))
+        aid = Config.SUDO_USERS.split()
+        for id_ in aid:
+            sudo_users.append(int(id_.strip()))
 
     if Config.EXCLUDED_EXTENSIONS:
         fx = Config.EXCLUDED_EXTENSIONS.split()
