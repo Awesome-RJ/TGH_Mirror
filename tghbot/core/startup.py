@@ -22,9 +22,8 @@ from tghbot import (
     sudo_users,
     user_data,
 )
-from tghbot.helper.ext_utils.db_handler import database
-
 from tghbot.config_manager import Config
+from tghbot.helper.ext_utils.db_handler import database
 from tghbot.tgh_client import TgClient
 from tghbot.torrent_manager import TorrentManager
 
