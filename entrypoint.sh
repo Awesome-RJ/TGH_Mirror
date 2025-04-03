@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DATABASE_PATH="postgresql://huntingbots_user:pEu4IbHUcOSeLl3oVuxAtpr2blPJvSok@dpg-ctpv3023esus73dlp8qg-a.oregon-postgres.render.com/huntingbots"  # Update with your actual database file path
+DATABASE_PATH="postgresql://tghbot_owner:npg_jae9mlh4kOMN@ep-shy-feather-a4hofch2-pooler.us-east-1.aws.neon.tech/tghbot?sslmode=require"  # Update with your actual database file path
 
 # Check if the database file exists
 if [ ! -f "$DATABASE_PATH" ]; then
