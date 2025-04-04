@@ -26,14 +26,13 @@ from os import path as ospath
 from os import remove as osremove
 from subprocess import Popen
 from subprocess import run as srun
-from time import time
+from time import sleep, time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aria2p import API as ariaAPI
 from aria2p import Client as ariaClient
 from pytz import timezone
 from qbittorrentapi import Client as qbClient
-from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
 
@@ -129,7 +128,7 @@ if ospath.exists("shorteners.txt"):
             if len(temp) == 2:
                 shorteners_list.append({"domain": temp[0], "api_key": temp[1]})
 
-if BASE_URL:
+if 'BASE_URL' in locals():
     Popen(
         f"gunicorn web.wserver:app --bind 0.0.0.0:{BASE_URL_PORT} --worker-class gevent",
         shell=True,
@@ -167,7 +166,7 @@ def get_client():
 
 def aria2c_init():
     try:
-        log_info("Initializing Aria2c")
+        LOGGER.info("Initializing Aria2c")
         link = "https://linuxmint.com/torrents/lmde-5-cinnamon-64bit.iso.torrent"
         dire = DOWNLOAD_DIR.rstrip("/")
         aria2.add_uris([link], {"dir": dire})
@@ -176,7 +175,7 @@ def aria2c_init():
         sleep(10)
         aria2.remove(downloads, force=True, files=True, clean=True)
     except Exception as e:
-        log_error(f"Aria2c initializing error: {e}")
+        LOGGER.error(f"Aria2c initializing error: {e}")
 
 
 Thread(target=aria2c_init).start()
