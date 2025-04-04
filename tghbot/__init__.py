@@ -47,14 +47,6 @@ bot_loop = new_event_loop()
 set_event_loop(bot_loop)
 
 
-async def download_with_aria2(url: str, download_path: str):
-    global aria2_client
-    if aria2_client is None:
-        aria2_client = Aria2WebSocketClient("ws://localhost:6800/jsonrpc")
-    await aria2_client.addUri([url], {"dir": download_path})
-    logger.info(f"Started downloading {url} with Aria2")
-
-
 class CustomFormatter(Formatter):
     def formatTime(  # noqa: N802
         self,
