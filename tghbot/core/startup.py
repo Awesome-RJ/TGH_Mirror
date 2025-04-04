@@ -24,9 +24,9 @@ from tghbot import (
 )
 from tghbot.helper.ext_utils.db_handler import database
 
-from .aeon_client import TgClient
-from .config_manager import Config
-from .torrent_manager import TorrentManager
+from tghbot.core.tgh_client import TgClient
+from tghbot.core.config_manager import Config
+from tghbot.core.torrent_manager import TorrentManager
 
 
 async def update_qb_options():
