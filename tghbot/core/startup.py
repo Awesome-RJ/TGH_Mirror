@@ -53,7 +53,12 @@ async def update_aria2_options():
 
 
 async def update_nzb_options():
-    no = (await sabnzbd_client.get_config())["config"]["misc"]
+    sabnzbd_client_instance = sabnzbd_client(
+        host="http://localhost",
+        api_key="mltb",
+        port="8070",
+    )
+    no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
     nzb_options.update(no)
 
 
@@ -197,9 +202,9 @@ async def save_settings():
             {"$set": aria2_options},
             upsert=True,
         )
-    if await database.db.settings.qbittorrent.find_one({"_id": TgClient.ID}) is None:
+    if await database.db.settings.qbittorrent.find_one({"_id\": TgClient.ID}) is None:
         await database.save_qbit_settings()
-    if await database.db.settings.nzb.find_one({"_id": TgClient.ID}) is None:
+    if await database.db.settings.nzb.find_one({"_id\": TgClient.ID}) is None:
         async with aiopen("sabnzbd/SABnzbd.ini", "rb+") as pf:
             nzb_conf = await pf.read()
         await database.db.settings.nzb.update_one(
