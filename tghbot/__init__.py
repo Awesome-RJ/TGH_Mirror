@@ -36,8 +36,7 @@ from aria2p import Client as ariaClient
 from pytz import timezone
 from qbittorrentapi import Client as qbClient
 
-# Correct import statement for sabnzbd_client
-from sabnzbdapi import Client as sabnzbd_client
+from sabnzbdapi import SabnzbdClient as sabnzbd_client
 
 getLogger("requests").setLevel(WARNING)
 getLogger("urllib3").setLevel(WARNING)
