@@ -32,7 +32,8 @@ RUN apt -qq update --fix-missing && \
     ffmpeg \
     python3-pip \
     p7zip-full \
-    p7zip-rar
+    p7zip-rar \
+    qbittorrent-nox  # Add this line to install qbittorrent-nox
 
 # Copy the requirements files
 COPY requirements.txt .
@@ -53,7 +54,8 @@ RUN chmod +x aria.sh
 
 # Check and ensure the database file exists and has correct permissions
 COPY entrypoint.sh /entrypoint.sh
- RUN chmod +x /entrypoint.sh
- ENTRYPOINT ["/entrypoint.sh"]
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+
 # Set the default command to execute
 CMD ["bash", "start.sh"]
