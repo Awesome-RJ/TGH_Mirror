@@ -27,6 +27,7 @@ from os import path as ospath
 from os import remove as osremove
 from subprocess import Popen
 from subprocess import run as srun
+from threading import Thread
 from time import sleep, time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -231,3 +232,4 @@ else:
 
 
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
+ 
