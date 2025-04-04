@@ -10,6 +10,7 @@ import os
 import subprocess
 from asyncio import Lock, new_event_loop, set_event_loop
 from datetime import datetime
+from importlib import import_module
 from logging import (
     ERROR,
     INFO,
@@ -119,6 +120,17 @@ same_directory_lock = Lock()
 nzb_listener_lock = Lock()
 jd_listener_lock = Lock()
 shorteners_list = []
+
+# Initialize config_file
+try:
+    settings = import_module("config")
+    config_file = {
+        key: value.strip() if isinstance(value, str) else value
+        for key, value in vars(settings).items()
+    }
+except Exception:
+    print("The 'config.py' file is missing! Falling back to environment variables.")
+    config_file = {}
 
 if ospath.exists("shorteners.txt"):
     with open("shorteners.txt", "r+") as f:
