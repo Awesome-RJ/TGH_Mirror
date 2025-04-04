@@ -22,11 +22,10 @@ from tghbot import (
     sudo_users,
     user_data,
 )
-from tghbot.helper.ext_utils.db_handler import database
-
-from tghbot.core.tgh_client import TgClient
 from tghbot.core.config_manager import Config
+from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
+from tghbot.helper.ext_utils.db_handler import database
 
 
 async def update_qb_options():
