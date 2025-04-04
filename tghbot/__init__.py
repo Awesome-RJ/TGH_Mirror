@@ -1,7 +1,7 @@
 # ruff: noqa: E402
-from uvloop import install
 from socket import setdefaulttimeout
 
+from uvloop import install
 
 install()
 setdefaulttimeout(600)
