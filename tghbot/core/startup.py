@@ -202,9 +202,9 @@ async def save_settings():
             {"$set": aria2_options},
             upsert=True,
         )
-    if await database.db.settings.qbittorrent.find_one({"_id\": TgClient.ID}) is None:
+    if await database.db.settings.qbittorrent.find_one({"_id": TgClient.ID}) is None:
         await database.save_qbit_settings()
-    if await database.db.settings.nzb.find_one({"_id\": TgClient.ID}) is None:
+    if await database.db.settings.nzb.find_one({"_id": TgClient.ID}) is None:
         async with aiopen("sabnzbd/SABnzbd.ini", "rb+") as pf:
             nzb_conf = await pf.read()
         await database.db.settings.nzb.update_one(
