@@ -20,7 +20,10 @@ from logging import (
 )
 from time import time
 
-from aioaria2 import Aria2WebSocketClient
+from subprocess import Popen, run as srun
+from os import remove as osremove, path as ospath, environ, getcwd
+from aria2p import API as ariaAPI, Client as ariaClient
+from qbittorrentapi import Client as qbClient
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pytz import timezone
 from uvloop import install
@@ -119,10 +122,102 @@ nzb_listener_lock = Lock()
 jd_listener_lock = Lock()
 shorteners_list = []
 
-sabnzbd_client = SabnzbdClient(
-    host="http://localhost",
-    api_key="admin",
-    port="8070",
-)
+if ospath.exists("shorteners.txt"):
+    with open("shorteners.txt", "r+") as f:
+        lines = f.readlines()
+        for line in lines:
+            temp = line.strip().split()
+            if len(temp) == 2:
+                shorteners_list.append({"domain": temp[0], "api_key": temp[1]})
+
+if BASE_URL:
+    Popen(
+        f"gunicorn web.wserver:app --bind 0.0.0.0:{BASE_URL_PORT} --worker-class gevent",
+        shell=True,
+    )
+
+srun(["qbittorrent-nox", "-d", f"--profile={getcwd()}"])
+if not ospath.exists(".netrc"):
+    with open(".netrc", "w"):
+        pass
+srun(["chmod", "600", ".netrc"])
+srun(["cp", ".netrc", "/root/.netrc"])
+srun(["chmod", "+x", "aria.sh"])
+srun("./aria.sh", shell=True)
+if ospath.exists("accounts.zip"):
+    if ospath.exists("accounts"):
+        srun(["rm", "-rf", "accounts"])
+    srun(["7z", "x", "-o.", "-aoa", "accounts.zip", "accounts/*.json"])
+    srun(["chmod", "-R", "777", "accounts"])
+    osremove("accounts.zip")
+if not ospath.exists("accounts"):
+    config_dict["USE_SERVICE_ACCOUNTS"] = False
+sleep(0.5)
+
+aria2 = ariaAPI(ariaClient(host="http://localhost", port=6800, secret=""))
+
+
+def get_client():
+    return qbClient(
+        host="localhost",
+        port=8090,
+        VERIFY_WEBUI_CERTIFICATE=False,
+        REQUESTS_ARGS={"timeout": (30, 60)},
+    )
+
+
+def aria2c_init():
+    try:
+        log_info("Initializing Aria2c")
+        link = "https://linuxmint.com/torrents/lmde-5-cinnamon-64bit.iso.torrent"
+        dire = DOWNLOAD_DIR.rstrip("/")
+        aria2.add_uris([link], {"dir": dire})
+        sleep(3)
+        downloads = aria2.get_downloads()
+        sleep(10)
+        aria2.remove(downloads, force=True, files=True, clean=True)
+    except Exception as e:
+        log_error(f"Aria2c initializing error: {e}")
+
+
+Thread(target=aria2c_init).start()
+sleep(1.5)
+
+aria2c_global = [
+    "bt-max-open-files",
+    "download-result",
+    "keep-unfinished-download-result",
+    "log",
+    "log-level",
+    "max-concurrent-downloads",
+    "max-download-result",
+    "max-overall-download-limit",
+    "save-session",
+    "max-overall-upload-limit",
+    "optimize-concurrent-downloads",
+    "save-cookies",
+    "server-stat-of",
+]
+
+if not aria2_options:
+    aria2_options = aria2.client.get_global_option()
+else:
+    a2c_glo = {op: aria2_options[op] for op in aria2c_global if op in aria2_options}
+    aria2.set_global_options(a2c_glo)
+
+qb_client = get_client()
+if not qbit_options:
+    qbit_options = dict(qb_client.app_preferences())
+    del qbit_options["listen_port"]
+    for k in list(qbit_options.keys()):
+        if k.startswith("rss"):
+            del qbit_options[k]
+else:
+    qb_opt = {**qbit_options}
+    for k, v in list(qb_opt.items()):
+        if v in ["", "*"]:
+            del qb_opt[k]
+    qb_client.app_set_preferences(qb_opt)
+
 
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
