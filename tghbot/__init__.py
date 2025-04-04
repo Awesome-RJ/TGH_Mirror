@@ -18,14 +18,18 @@ from logging import (
     basicConfig,
     getLogger,
 )
+from os import environ, getcwd
+from os import path as ospath
+from os import remove as osremove
+from subprocess import Popen
+from subprocess import run as srun
 from time import time
 
-from subprocess import Popen, run as srun
-from os import remove as osremove, path as ospath, environ, getcwd
-from aria2p import API as ariaAPI, Client as ariaClient
-from qbittorrentapi import Client as qbClient
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from aria2p import API as ariaAPI
+from aria2p import Client as ariaClient
 from pytz import timezone
+from qbittorrentapi import Client as qbClient
 from uvloop import install
 
 from sabnzbdapi import SabnzbdClient
@@ -136,19 +140,19 @@ if BASE_URL:
         shell=True,
     )
 
-srun(["qbittorrent-nox", "-d", f"--profile={getcwd()}"])
+srun(["qbittorrent-nox", "-d", f"--profile={getcwd()}"], check=False)
 if not ospath.exists(".netrc"):
     with open(".netrc", "w"):
         pass
-srun(["chmod", "600", ".netrc"])
-srun(["cp", ".netrc", "/root/.netrc"])
-srun(["chmod", "+x", "aria.sh"])
-srun("./aria.sh", shell=True)
+srun(["chmod", "600", ".netrc"], check=False)
+srun(["cp", ".netrc", "/root/.netrc"], check=False)
+srun(["chmod", "+x", "aria.sh"], check=False)
+srun("./aria.sh", shell=True, check=False)
 if ospath.exists("accounts.zip"):
     if ospath.exists("accounts"):
-        srun(["rm", "-rf", "accounts"])
-    srun(["7z", "x", "-o.", "-aoa", "accounts.zip", "accounts/*.json"])
-    srun(["chmod", "-R", "777", "accounts"])
+        srun(["rm", "-rf", "accounts"], check=False)
+    srun(["7z", "x", "-o.", "-aoa", "accounts.zip", "accounts/*.json"], check=False)
+    srun(["chmod", "-R", "777", "accounts"], check=False)
     osremove("accounts.zip")
 if not ospath.exists("accounts"):
     config_dict["USE_SERVICE_ACCOUNTS"] = False
