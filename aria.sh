@@ -3,7 +3,7 @@
 tracker_list=$(curl -Ns https://ngosang.github.io/trackerslist/trackers_all_http.txt | 
                awk '$0' | tr '\n\n' ',')
 
-xria2 \
+aria2c \
     --allow-overwrite=true \
     --auto-file-renaming=true \
     --bt-enable-lpd=true \
@@ -35,5 +35,7 @@ xria2 \
     --user-agent=Wget/1.12 \
     --peer-agent=qBittorrent/4.5.2 \
     --quiet=true \
+    --summary-interval=0 \
+    --max-upload-limit=1K    --quiet=true \
     --summary-interval=0 \
     --max-upload-limit=1K
