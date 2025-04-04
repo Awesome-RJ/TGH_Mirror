@@ -1,29 +1,14 @@
-from asyncio import create_subprocess_exec, create_subprocess_shell
-from os import environ
-
-from aiofiles import open as aiopen
-from aiofiles.os import makedirs, remove
 from aiofiles.os import path as aiopath
 from aioshutil import rmtree
 
 from tghbot import (
     LOGGER,
     aria2_options,
-    auth_chats,
-    drives_ids,
-    drives_names,
-    excluded_extensions,
-    index_urls,
     nzb_options,
     qbit_options,
-    rss_dict,
     sabnzbd_client,
-    shorteners_list,
-    sudo_users,
-    user_data,
 )
 from tghbot.core.config_manager import Config
-from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
 
