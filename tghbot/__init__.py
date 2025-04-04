@@ -128,7 +128,7 @@ if ospath.exists("shorteners.txt"):
             if len(temp) == 2:
                 shorteners_list.append({"domain": temp[0], "api_key": temp[1]})
 
-if 'BASE_URL' in locals():
+if "BASE_URL" in locals():
     Popen(
         f"gunicorn web.wserver:app --bind 0.0.0.0:{BASE_URL_PORT} --worker-class gevent",
         shell=True,
