@@ -232,4 +232,3 @@ else:
 
 
 scheduler = AsyncIOScheduler(event_loop=bot_loop)
- 
