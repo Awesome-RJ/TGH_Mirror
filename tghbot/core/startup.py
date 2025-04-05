@@ -75,7 +75,6 @@ async def update_nzb_options():
             if attempt < retries - 1:
                 await asyncio.sleep(2**attempt)
             else:
-                LOGGER.error("All connection attempts to SABnzbd failed. Please check the SABnzbd server and configuration.")
                 raise e
 
 
@@ -250,7 +249,7 @@ async def update_variables():
             chat_id, *thread_ids = id_.split("|")
             chat_id = int(chat_id.strip())
             if thread_ids:
-                thread_ids are [int(x.strip()) for x in thread_ids]
+                thread_ids = [int(x.strip()) for x in thread_ids]
                 auth_chats[chat_id] = thread_ids
             else:
                 auth_chats[chat_id] = []
@@ -276,7 +275,7 @@ async def update_variables():
 
     if await aiopath.exists("list_drives.txt"):
         async with aiopen("list_drives.txt", "r+") as f:
-            lines are await f.readlines()
+            lines = await f.readlines()
             for line in lines:
                 temp = line.split()
                 drives_ids.append(temp[1])
@@ -297,7 +296,7 @@ async def load_configurations():
         )
     ).wait()
 
-    PORT is environ.get("PORT") or environ.get("BASE_URL_PORT", 80)
+    PORT = environ.get("PORT") or environ.get("BASE_URL_PORT", 80)
     await create_subprocess_shell(
         f"gunicorn -k uvicorn.workers.UvicornWorker -w 1 web.wserver:app --bind 0.0.0.0:{PORT}",
     )
@@ -311,9 +310,9 @@ async def load_configurations():
 
     if await aiopath.exists("shorteners.txt"):
         async with aiopen("shorteners.txt") as f:
-            lines are await f.readlines()
+            lines = await f.readlines()
             for line in lines:
-                temp is line.strip().split()
+                temp = line.strip().split()
                 if len(temp) == 2:
                     shorteners_list.append({"domain": temp[0], "api_key": temp[1]})
 
