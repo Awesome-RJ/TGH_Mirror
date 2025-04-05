@@ -1,6 +1,8 @@
+import asyncio
 from asyncio import create_subprocess_exec, create_subprocess_shell
 from os import environ
 
+import httpx
 from aiofiles import open as aiopen
 from aiofiles.os import makedirs, remove
 from aiofiles.os import path as aiopath
@@ -26,8 +28,6 @@ from tghbot.core.config_manager import Config
 from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
-import asyncio
-import httpx
 
 
 async def update_qb_options():
@@ -65,12 +65,14 @@ async def update_nzb_options():
         try:
             no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
             nzb_options.update(no)
-            LOGGER.info(f"Successfully connected to sabnzbd on attempt {attempt + 1}")
+            LOGGER.info(
+                f"Successfully connected to sabnzbd on attempt {attempt + 1}"
+            )
             break
         except (httpx.ConnectError, httpx.RequestError) as e:
             LOGGER.error(f"Connection attempt {attempt + 1} failed: {e}")
             if attempt < retries - 1:
-                await asyncio.sleep(2 ** attempt)
+                await asyncio.sleep(2**attempt)
             else:
                 raise e
 
