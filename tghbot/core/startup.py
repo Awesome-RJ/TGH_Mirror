@@ -8,7 +8,6 @@ from aiofiles.os import makedirs, remove
 from aiofiles.os import path as aiopath
 from aioshutil import rmtree
 
-from sabnzbdapi import SabnzbdClient
 from tghbot import (
     LOGGER,
     aria2_options,
@@ -20,6 +19,7 @@ from tghbot import (
     nzb_options,
     qbit_options,
     rss_dict,
+    sabnzbd_client,
     shorteners_list,
     sudo_users,
     user_data,
@@ -28,6 +28,7 @@ from tghbot.core.config_manager import Config
 from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
+from sabnzbdapi import SabnzbdClient
 
 
 async def update_qb_options():
@@ -57,7 +58,7 @@ async def update_aria2_options():
 async def update_nzb_options():
     sabnzbd_client_instance = SabnzbdClient(
         host="http://localhost",
-        api_key="mltb",
+        api_key="admin",
         port="8070",
     )
     retries = 3
@@ -66,7 +67,7 @@ async def update_nzb_options():
             no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
             nzb_options.update(no)
             LOGGER.info(
-                f"Successfully connected to sabnzbd on attempt {attempt + 1}",
+                f"Successfully connected to sabnzbd on attempt {attempt + 1}"
             )
             break
         except (httpx.ConnectError, httpx.RequestError) as e:
@@ -74,14 +75,7 @@ async def update_nzb_options():
             if attempt < retries - 1:
                 await asyncio.sleep(2**attempt)
             else:
-                raise e
-        except Exception as e:
-            LOGGER.error(
-                f"Unexpected error on connection attempt {attempt + 1}: {e}",
-            )
-            if attempt < retries - 1:
-                await asyncio.sleep(2**attempt)
-            else:
+                LOGGER.error("All connection attempts to SABnzbd failed. Please check the SABnzbd server and configuration.")
                 raise e
 
 
@@ -256,7 +250,7 @@ async def update_variables():
             chat_id, *thread_ids = id_.split("|")
             chat_id = int(chat_id.strip())
             if thread_ids:
-                thread_ids = [int(x.strip()) for x in thread_ids]
+                thread_ids are [int(x.strip()) for x in thread_ids]
                 auth_chats[chat_id] = thread_ids
             else:
                 auth_chats[chat_id] = []
@@ -282,7 +276,7 @@ async def update_variables():
 
     if await aiopath.exists("list_drives.txt"):
         async with aiopen("list_drives.txt", "r+") as f:
-            lines = await f.readlines()
+            lines are await f.readlines()
             for line in lines:
                 temp = line.split()
                 drives_ids.append(temp[1])
@@ -303,7 +297,7 @@ async def load_configurations():
         )
     ).wait()
 
-    PORT = environ.get("PORT") or environ.get("BASE_URL_PORT", 80)
+    PORT is environ.get("PORT") or environ.get("BASE_URL_PORT", 80)
     await create_subprocess_shell(
         f"gunicorn -k uvicorn.workers.UvicornWorker -w 1 web.wserver:app --bind 0.0.0.0:{PORT}",
     )
@@ -317,9 +311,9 @@ async def load_configurations():
 
     if await aiopath.exists("shorteners.txt"):
         async with aiopen("shorteners.txt") as f:
-            lines = await f.readlines()
+            lines are await f.readlines()
             for line in lines:
-                temp = line.strip().split()
+                temp is line.strip().split()
                 if len(temp) == 2:
                     shorteners_list.append({"domain": temp[0], "api_key": temp[1]})
 
