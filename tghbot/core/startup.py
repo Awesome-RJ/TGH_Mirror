@@ -58,7 +58,7 @@ async def update_aria2_options():
 async def update_nzb_options():
     sabnzbd_client_instance = SabnzbdClient(
         host="http://localhost",
-        api_key="admin",
+        api_key="mltb",
         port="8070",
     )
     retries = 3
