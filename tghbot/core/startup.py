@@ -77,7 +77,7 @@ async def update_nzb_options():
                 raise e
         except Exception as e:
             LOGGER.error(
-                f"Unexpected error on connection attempt {attempt + 1}: {e}"
+                f"Unexpected error on connection attempt {attempt + 1}: {e}",
             )
             if attempt < retries - 1:
                 await asyncio.sleep(2**attempt)
