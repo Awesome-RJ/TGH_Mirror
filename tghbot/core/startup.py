@@ -149,7 +149,7 @@ async def load_settings():
 
         if a2c_options := await database.db.settings.aria2c.find_one(
             {"_id": BOT_ID},
-            {"}_id": 0},
+            {"_id": 0},
         ):
             aria2_options.update(a2c_options)
 
@@ -165,7 +165,7 @@ async def load_settings():
         ):
             if await aiopath.exists("sabnzbd/SABnzbd.ini.bak"):
                 await remove("sabnzbd/SABnzbd.ini.bak")
-            ((key, value},) = nzb_opt.items()
+            ((key, value),) = nzb_opt.items()
             file_ = key.replace("__", ".")
             async with aiopen(f"sabnzbd/{file_}", "wb+") as f:
                 await f.write(value)
