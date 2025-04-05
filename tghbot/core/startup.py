@@ -28,6 +28,7 @@ from tghbot.core.config_manager import Config
 from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
+from sabnzbdapi import SabnzbdClient
 
 
 async def update_qb_options():
@@ -55,10 +56,12 @@ async def update_aria2_options():
 
 
 async def update_nzb_options():
-    sabnzbd_client_instance = sabnzbd_client(
+    sabnzbd_client_instance = SabnzbdClient(
         host="http://localhost",
-        api_key="mltb",
+        api_key="admin",
         port="8070",
+        username="admin",
+        password="sabpassword",
     )
     retries = 3
     for attempt in range(retries):
@@ -146,7 +149,7 @@ async def load_settings():
 
         if a2c_options := await database.db.settings.aria2c.find_one(
             {"_id": BOT_ID},
-            {"_id": 0},
+            {"}_id": 0},
         ):
             aria2_options.update(a2c_options)
 
@@ -162,7 +165,7 @@ async def load_settings():
         ):
             if await aiopath.exists("sabnzbd/SABnzbd.ini.bak"):
                 await remove("sabnzbd/SABnzbd.ini.bak")
-            ((key, value),) = nzb_opt.items()
+            ((key, value},) = nzb_opt.items()
             file_ = key.replace("__", ".")
             async with aiopen(f"sabnzbd/{file_}", "wb+") as f:
                 await f.write(value)
