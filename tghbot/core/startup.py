@@ -26,6 +26,8 @@ from tghbot.core.config_manager import Config
 from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
+import asyncio
+import httpx
 
 
 async def update_qb_options():
@@ -58,8 +60,18 @@ async def update_nzb_options():
         api_key="mltb",
         port="8070",
     )
-    no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
-    nzb_options.update(no)
+    retries = 3
+    for attempt in range(retries):
+        try:
+            no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
+            nzb_options.update(no)
+            break
+        except (httpx.ConnectError, httpx.RequestError) as e:
+            LOGGER.error(f"Connection attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                await asyncio.sleep(2 ** attempt)
+            else:
+                raise e
 
 
 async def load_settings():
