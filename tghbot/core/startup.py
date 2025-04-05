@@ -8,7 +8,6 @@ from aiofiles.os import makedirs, remove
 from aiofiles.os import path as aiopath
 from aioshutil import rmtree
 
-from sabnzbdapi import SabnzbdClient
 from tghbot import (
     LOGGER,
     aria2_options,
@@ -20,6 +19,7 @@ from tghbot import (
     nzb_options,
     qbit_options,
     rss_dict,
+    sabnzbd_client,
     shorteners_list,
     sudo_users,
     user_data,
@@ -28,6 +28,7 @@ from tghbot.core.config_manager import Config
 from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
+from sabnzbdapi import SabnzbdClient
 
 
 async def update_qb_options():
@@ -66,7 +67,7 @@ async def update_nzb_options():
             no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
             nzb_options.update(no)
             LOGGER.info(
-                f"Successfully connected to sabnzbd on attempt {attempt + 1}",
+                f"Successfully connected to sabnzbd on attempt {attempt + 1}"
             )
             break
         except (httpx.ConnectError, httpx.RequestError) as e:
@@ -76,9 +77,7 @@ async def update_nzb_options():
             else:
                 raise e
         except Exception as e:
-            LOGGER.error(
-                f"Unexpected error on connection attempt {attempt + 1}: {e}"
-            )
+            LOGGER.error(f"Unexpected error on connection attempt {attempt + 1}: {e}")
             if attempt < retries - 1:
                 await asyncio.sleep(2**attempt)
             else:
