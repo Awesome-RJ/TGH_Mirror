@@ -45,7 +45,7 @@ RUN pip3 install --upgrade setuptools wheel
 
 # Install any needed packages specified in requirements.txt and tghbot/requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
-# RUN pip3 install --no-cache-dir -r tghbot/requirements.txt
+RUN pip3 install --no-cache-dir -r tghbot/requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
