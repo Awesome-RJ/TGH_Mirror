@@ -21,7 +21,7 @@ motor
 natsort
 pillow
 psutil
-pyshorteners
+# pyshorteners
 python-dotenv
 python-magic
 pytz
