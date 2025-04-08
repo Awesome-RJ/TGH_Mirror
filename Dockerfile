@@ -34,7 +34,7 @@ RUN apt -qq update --fix-missing && \
     p7zip-full \
     p7zip-rar \
     sabnzbdplus \
-    qbittorrent-nox 
+    qbittorrent-nox  # Add this line to install qbittorrent-nox 
 
 # Copy the requirements files
 COPY requirements.txt .
