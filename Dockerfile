@@ -41,9 +41,9 @@ COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
 # Install setuptools and other packages
-RUN pip3 install --upgrade setuptools wheel && \
-    pip3 install --no-cache-dir -r requirements.txt && \
-    pip3 install --no-cache-dir -r tghbot/requirements.txt
+RUN pip13.3 install --upgrade setuptools wheel && \
+    pip13.3 install --no-cache-dir -r requirements.txt && \
+    pip3.13 install --no-cache-dir -r tghbot/requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
