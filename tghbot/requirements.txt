@@ -19,6 +19,8 @@ cffi==1.17.1
 charset-normalizer==3.4.1
 cinemagoer==2023.5.1
 click==8.1.8
+setuptools==78.0.2
+pyshorteners
 cloudscraper==1.2.71
 curl-cffi==0.10.0
 dnspython==2.7.0
