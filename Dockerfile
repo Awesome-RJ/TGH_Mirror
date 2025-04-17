@@ -33,16 +33,18 @@ RUN apt -qq update --fix-missing && \
     python3-pip \
     p7zip-full \
     p7zip-rar \
-    qbittorrent-nox  # Add this line to install qbittorrent-nox 
+    qbittorrent-nox  # Add this line to install qbittorrent-nox
 
 # Copy the requirements files
 COPY requirements.txt .
 COPY tghbot/requirements.txt ./tghbot/
 
-# Install setuptools and other packages
-RUN pip install --upgrade setuptools wheel && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir -r tghbot/requirements.txt
+# Install setuptools
+RUN pip3 install --upgrade setuptools wheel
+
+# Install any needed packages specified in requirements.txt and tghbot/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r tghbot/requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
