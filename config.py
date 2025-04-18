@@ -5,8 +5,7 @@ TELEGRAM_API = 3975570 # Enter telegram API key
 TELEGRAM_HASH = "680b62f2844aa1954216f6cb99d2f3d9" # Enter telegram API hash
 
 # SEMI-REQUIRED, WE SUGGEST TO FILL IT FROM MONGODB
-DATABASE_URL = "mongodb+srv://hunter123:hunter123@cluster0.iueac.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
+DATABASE_URL = ""
 # OPTIONAL CONFIG
 TG_PROXY = {}
 USER_SESSION_STRING = ""
