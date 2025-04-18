@@ -115,7 +115,7 @@ UPSTREAM_REPO = (
 UPSTREAM_BRANCH = (
     config_file.get("UPSTREAM_BRANCH", "")
     or os.getenv("UPSTREAM_BRANCH", "")
-    or "HuntingBots"
+    or "GhostBots"
 )
 
 if UPSTREAM_REPO:
