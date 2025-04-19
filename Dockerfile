@@ -33,6 +33,7 @@ RUN apt -qq update --fix-missing && \
     python3-pip \
     p7zip-full \
     p7zip-rar \
+    sabnzbdplus \
     qbittorrent-nox  # Add this line to install qbittorrent-nox
 
 # Copy the requirements files
