@@ -56,24 +56,27 @@ async def update_aria2_options():
 
 async def update_nzb_options():
     sabnzbd_client_instance = SabnzbdClient(
-        host="http://localhost",
-        api_key="mltb",
-        port="8070",
+        host="http://localhost",  # Update this to the correct host
+        api_key="mltb",          # Ensure this API key is correct
+        port="8070",             # Verify the port
     )
     retries = 3
     for attempt in range(retries):
         try:
+            LOGGER.info(f"Attempting to connect to Sabnzbd (Attempt {attempt + 1}/{retries})...")
             no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
             nzb_options.update(no)
             LOGGER.info(
-                f"Successfully connected to sabnzbd on attempt {attempt + 1}",
+                f"Successfully connected to Sabnzbd on attempt {attempt + 1}",
             )
             break
         except (httpx.ConnectError, httpx.RequestError) as e:
             LOGGER.error(f"Connection attempt {attempt + 1} failed: {e}")
             if attempt < retries - 1:
+                LOGGER.info("Retrying connection after delay...")
                 await asyncio.sleep(2**attempt)
             else:
+                LOGGER.error("All connection attempts to Sabnzbd failed. Please check the service status and configuration.")
                 raise e
 
 
