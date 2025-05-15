@@ -54,7 +54,7 @@ async def update_nzb_options():
     for attempt in range(retries):
         try:
             LOGGER.info(
-                f"Attempting to connect to Sabnzbd (Attempt {attempt + 1}/{retries})..."
+                f"Attempting to connect to Sabnzbd (Attempt {attempt + 1}/{retries})...",
             )
             no = (await sabnzbd_client_instance.get_config())["config"]["misc"]
             nzb_options.update(no)
@@ -69,7 +69,7 @@ async def update_nzb_options():
                 await asyncio.sleep(2**attempt)
             else:
                 LOGGER.error(
-                    "All connection attempts to Sabnzbd failed. Please check the service status and configuration."
+                    "All connection attempts to Sabnzbd failed. Please check the service status and configuration.",
                 )
                 raise e
 
