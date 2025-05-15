@@ -1,6 +1,4 @@
 import asyncio
-from asyncio import create_subprocess_exec, create_subprocess_shell
-from os import environ
 
 import httpx
 from aiofiles import open as aiopen
@@ -12,20 +10,12 @@ from sabnzbdapi import SabnzbdClient
 from tghbot import (
     LOGGER,
     aria2_options,
-    auth_chats,
-    drives_ids,
-    drives_names,
-    excluded_extensions,
-    index_urls,
     nzb_options,
     qbit_options,
     rss_dict,
-    shorteners_list,
-    sudo_users,
     user_data,
 )
 from tghbot.core.config_manager import Config
-from tghbot.core.tgh_client import TgClient
 from tghbot.core.torrent_manager import TorrentManager
 from tghbot.helper.ext_utils.db_handler import database
 
@@ -99,16 +89,107 @@ async def load_settings():
             await database.db.settings.deployConfig.replace_one(
                 {"_id": BOT_ID},
                 current_deploy_config,
+                upsert=True,
+            )
+        elif old_deploy_config != current_deploy_config:
+            runtime_config = (
+                await database.db.settings.config.find_one(
+                    {"_id": BOT_ID},
+                    {"_id": 0},
+                )
+                or {}
             )
 
+            new_vars = {
+                k: v
+                for k, v in current_deploy_config.items()
+                if k not in runtime_config
+            }
+            if new_vars:
+                runtime_config.update(new_vars)
+                await database.db.settings.config.replace_one(
+                    {"_id": BOT_ID},
+                    runtime_config,
+                    upsert=True,
+                )
+                LOGGER.info(f"Added new variables: {list(new_vars.keys())}")
 
-# Add the missing load_configurations function
-async def load_configurations():
-    """
-    This function is a placeholder to resolve the ImportError.
-    Replace it with the actual logic needed for loading configurations.
-    """
-    LOGGER.info("Loading configurations...")
-    # Implement the logic for loading configurations here
-    await load_settings()
-    LOGGER.info("Configurations loaded successfully.")
+            await database.db.settings.deployConfig.replace_one(
+                {"_id": BOT_ID},
+                current_deploy_config,
+                upsert=True,
+            )
+
+        runtime_config = await database.db.settings.config.find_one(
+            {"_id": BOT_ID},
+            {"_id": 0},
+        )
+        if runtime_config:
+            Config.load_dict(runtime_config)
+
+        if pf_dict := await database.db.settings.files.find_one(
+            {"_id": BOT_ID},
+            {"_id": 0},
+        ):
+            for key, value in pf_dict.items():
+                if value:
+                    file_ = key.replace("__", ".")
+                    async with aiopen(file_, "wb+") as f:
+                        await f.write(value)
+
+        if a2c_options := await database.db.settings.aria2c.find_one(
+            {"_id": BOT_ID},
+            {"_id": 0},
+        ):
+            aria2_options.update(a2c_options)
+
+        if qbit_opt := await database.db.settings.qbittorrent.find_one(
+            {"_id": BOT_ID},
+            {"_id": 0},
+        ):
+            qbit_options.update(qbit_opt)
+
+        if nzb_opt := await database.db.settings.nzb.find_one(
+            {"_id": BOT_ID},
+            {"_id": 0},
+        ):
+            if await aiopath.exists("sabnzbd/SABnzbd.ini.bak"):
+                await remove("sabnzbd/SABnzbd.ini.bak")
+            ((key, value),) = nzb_opt.items()
+            file_ = key.replace("__", ".")
+            async with aiopen(f"sabnzbd/{file_}", "wb+") as f:
+                await f.write(value)
+
+        if await database.db.users.find_one():
+            for p in ["thumbnails", "tokens", "rclone"]:
+                if not await aiopath.exists(p):
+                    await makedirs(p)
+            rows = database.db.users.find({})
+            async for row in rows:
+                uid = row["_id"]
+                del row["_id"]
+                thumb_path = f"thumbnails/{uid}.jpg"
+                rclone_config_path = f"rclone/{uid}.conf"
+                token_path = f"tokens/{uid}.pickle"
+                if row.get("THUMBNAIL"):
+                    async with aiopen(thumb_path, "wb+") as f:
+                        await f.write(row["THUMBNAIL"])
+                    row["THUMBNAIL"] = thumb_path
+                if row.get("RCLONE_CONFIG"):
+                    async with aiopen(rclone_config_path, "wb+") as f:
+                        await f.write(row["RCLONE_CONFIG"])
+                    row["RCLONE_CONFIG"] = rclone_config_path
+                if row.get("TOKEN_PICKLE"):
+                    async with aiopen(token_path, "wb+") as f:
+                        await f.write(row["TOKEN_PICKLE"])
+                    row["TOKEN_PICKLE"] = token_path
+                user_data[uid] = row
+            LOGGER.info("Users data has been imported from Database")
+
+        if await database.db.rss[BOT_ID].find_one():
+            rows = database.db.rss[BOT_ID].find({})
+            async for row in rows:
+                user_id = row["_id"]
+                del row["_id"]
+                rss_dict[user_id] = row
+            LOGGER.info("Rss data has been imported from Database.")
