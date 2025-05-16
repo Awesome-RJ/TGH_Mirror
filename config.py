@@ -62,11 +62,11 @@ MEGA_PASSWORD = ""
 USENET_SERVERS = [
     {
         "name": "main",
-        "host": "",
-        "port": 563,
+        "host": "localhost",
+        "port": 8070,
         "timeout": 60,
-        "username": "",
-        "password": "",
+        "username": "mltb",
+        "password": "mltbmltb",
         "connections": 8,
         "ssl": 1,
         "ssl_verify": 2,
